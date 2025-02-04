@@ -10,6 +10,7 @@
 #define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
 #define Sp 1.0  // 速度制御用 P ゲイン
 #define Sd 0.5  // 速度制御用 D ゲイン
+#define Si 0.5  // 速度制御用 I ゲイン
 
 #ifndef M_PI
 #define M_PI 3.1415926535
@@ -31,10 +32,12 @@ extern TIM_HandleTypeDef htim8;
 
 extern UART_HandleTypeDef huart6;
 
+extern float previous_speed_error_L;
+extern float previous_speed_error_R;
 
+extern int mode;
+extern int mode_processed;
 
-extern int mode = 0;
-extern int mode_processed = 0;
 // extern float base_speed;
 extern float Kp, Ki, Kd;
 extern float previous_error, integral;
@@ -67,7 +70,7 @@ extern float max_white_1;
 void readSens(void);
 void readSens2(void);
 void controlMotor(double duty_L, double duty_R);
-void calculateEncoderSpeed(float dt); 
+void calculateEncoderSpeed();
 
 
 

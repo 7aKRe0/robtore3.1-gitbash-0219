@@ -35,10 +35,13 @@
 #define Si 0.5  // 速度制御用 I ゲイン
 
 
+
 float base_speed = 0;
 float Kp = 0.7;
 float Kd = 0.6;
 float previous_error = 0.0;
+float previous_speed_error_L = 0.0;
+float previous_speed_error_R = 0.0;
 float integral = 0.0;
 float target_speed_L = 0.0;
 float target_speed_R = 0.0;

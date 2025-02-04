@@ -142,8 +142,9 @@ void calculateEncoderSpeed(){
 	if(cnt_new_L != cnt_old_L || cnt_new_R != cnt_old_R){
 		char scnt[100];
 		sprintf(scnt, "Speed: %f\r\n", distance_1ms);
-		HAL_UART_Transmit(&huart2, (uint8_t*)scnt, strlen(scnt) + 1, HAL_MAX_DELAY);
+		HAL_UART_Transmit(&huart6, (uint8_t*)scnt, strlen(scnt) + 1, HAL_MAX_DELAY);
 	}
 	cnt_old_L = cnt_new_L;
     cnt_old_R = cnt_new_R;
 }
+

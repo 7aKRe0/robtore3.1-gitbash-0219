@@ -67,7 +67,7 @@ void flag(void){
     }
 
     if(stop_flag >= 2){
-        base_speed = 0;
+    	target_speed = 0;
     }
     
 

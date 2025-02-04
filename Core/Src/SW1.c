@@ -14,7 +14,6 @@ void ButtonPress(void){
     if (HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15) == GPIO_PIN_RESET)//SW2
     {
         HAL_Delay(200);
-        base_speed = base_speed + 100;
     }
 
 }
