@@ -29,7 +29,7 @@ void loop(){
             {
             case 1:
                 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);//LED1
-                base_speed = 0;
+                target_speed = 0;
                 calibrate_sensors();
                 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);//LED1
                 break;
@@ -69,18 +69,18 @@ void loop(){
 
 void mapFirstLayer() {
 	stop_flag = 0;
-	base_speed = 600;
+	target_speed = 30;
 	flag();
 }
 
 void mapSecondLayer() {
 	stop_flag = 0;
-	base_speed = 700;
+	target_speed = 50;
 	flag();
 }
 
 void mapThirdSeLayer() {
 	stop_flag = 0;
-	base_speed = 800;
+	target_speed = 80;
 	flag();
 }

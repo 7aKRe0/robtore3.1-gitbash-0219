@@ -27,12 +27,12 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 #define SENSOR_COUNT 6
-// #define dt 0.01
+#define dt 0.01
 #define TIRE 22
 #define M_PI 3.1415926535
-#define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
+#define ENCODER_CPR 2048  //  CPR のエンコー�?を使用(kari)
 #define Sp 1.0  // 速度制御用 P ゲイン
-#define Sd 0.5  // 速度制御用 D ゲイン
+#define Si 0.5  // 速度制御用 I ゲイン
 
 
 float base_speed = 0;
@@ -100,6 +100,7 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim8;
 
 UART_HandleTypeDef huart6;
@@ -121,6 +122,7 @@ static void MX_TIM3_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 
@@ -137,6 +139,12 @@ int _write(int file, char *ptr, int len) {
     HAL_UART_Transmit(&huart6, (uint8_t*) ptr, len, HAL_MAX_DELAY);
     return len;
 }
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim6)
+{
+   //割り込み中の処理
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -177,6 +185,7 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI3_Init();
   MX_USART6_UART_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Encoder_Start_IT( &htim3,TIM_CHANNEL_ALL);//ENC1
   HAL_TIM_Encoder_Start_IT( &htim4,TIM_CHANNEL_ALL);//ENC2
@@ -212,8 +221,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-//    loop();
-	ControlMotor(800,800);
 
     /* USER CODE BEGIN 3 */
   }
@@ -702,6 +709,44 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
+  * @brief TIM6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 3;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 9000;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+
+  /* USER CODE END TIM6_Init 2 */
 
 }
 

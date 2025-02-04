@@ -5,7 +5,7 @@
 #include "main.h"
 
 #define SENSOR_COUNT 6
-// #define dt 0.01
+#define dt 0.01
 #define TIRE 22
 #define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
 #define Sp 1.0  // 速度制御用 P ゲイン
@@ -35,10 +35,10 @@ extern UART_HandleTypeDef huart6;
 
 extern int mode = 0;
 extern int mode_processed = 0;
-extern float base_speed;
+// extern float base_speed;
 extern float Kp, Ki, Kd;
 extern float previous_error, integral;
-extern float target_speed_L, target_speed_R;
+extern float target_speed;
 extern float current_speed_L, current_speed_R;
 extern float side_r_flag, side_l_flag;
 extern float side_l_time, side_r_time;

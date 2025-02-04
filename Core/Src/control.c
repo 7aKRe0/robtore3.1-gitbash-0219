@@ -1,6 +1,8 @@
 #include "some.h"
 
-
+#define REDUCTION_RATIO 0.4 // 減速比
+#define DISTANCE_PER_CNT (M_PI * TIRE * REDUCTION_RATIO / ENCODER_CPR) //[mm per cnt]
+float distance_1ms,distance_1ms_L,distance_1ms_R;
 
 
 void ControlMotor(double duty_L, double duty_R){
@@ -64,17 +66,6 @@ float calculateError() {
 }
 
 void SpeedControl() {
-	//kari
-	static uint32_t last_time = 0;
-	uint32_t current_time = HAL_GetTick();
-	float dt = (current_time - last_time) / 1000.0;
-	last_time = current_time;
-
-	if (dt < 0.001){
-		dt = 0.001;
-	}
-	//kokomade
-
 
     float error = calculateError();
     // PD
@@ -84,31 +75,32 @@ void SpeedControl() {
     float D =Kd * derivative;
 
     float output = P + D;
-    previous_error = error;
+    previous_error = error;//line
 
-    target_speed_L = base_speed - output;
-    target_speed_R = base_speed + output;
-
-	calculateEncoderSpeed(dt);//encoder PRG
+	calculateEncoderSpeed();//encoder PRG
 	//speed_error
-	float adjusted_speed_L = target_speed_L -current_speed_L;
-	float adjusted_speed_R = target_speed_R -current_speed_R;
+	float adjusted_speed_L = target_speed - distance_1ms_L;
+	float adjusted_speed_R = target_speed - distance_1ms_R;
 
-    static float previous_speed_error_L = 0, previous_speed_error_R = 0;
-    float speed_derivative_L = (adjusted_speed_L - previous_speed_error_L) / dt;
-    float speed_derivative_R = (adjusted_speed_R - previous_speed_error_R) / dt;
-
+	static float integral_L = 0, integral_R = 0;
+	integral_L += adjusted_speed_L * dt;
+	integral_R += adjusted_speed_R * dt;
 
 	//P
 	float speed_L_P_gain = Sp * adjusted_speed_L;
 	float speed_R_P_gain = Sp * adjusted_speed_R;
-	//D
-    float speed_L_D_gain = Sd * speed_derivative_L;
-    float speed_R_D_gain = Sd * speed_derivative_R;
+	//I
+    float speed_L_I_gain = Si * integral_L;
+    float speed_R_I_gain = Si * integral_R;
     
+	#define I_LIMIT 1000
+	if (integral_L > I_LIMIT) integral_L = I_LIMIT;
+	if (integral_L < -I_LIMIT) integral_L = -I_LIMIT;
+	if (integral_R > I_LIMIT) integral_R = I_LIMIT;
+	if (integral_R < -I_LIMIT) integral_R = -I_LIMIT;
 
-	float duty_L = speed_L_P_gain + speed_L_D_gain;
-    float duty_R = speed_R_P_gain + speed_R_D_gain;
+	float duty_L = speed_L_P_gain + speed_L_I_gain;
+    float duty_R = speed_R_P_gain + speed_R_I_gain;
 
     if (duty_L > 4000) duty_L = 4000;
     if (duty_L < -4000) duty_L = -4000;
@@ -117,13 +109,17 @@ void SpeedControl() {
 
     previous_speed_error_L = adjusted_speed_L;
     previous_speed_error_R = adjusted_speed_R;
+
+
+	float motor_L = duty_L - output;
+    float motor_R = duty_R + output;
     // モータ
-    ControlMotor(duty_L, duty_R);
+    ControlMotor(motor_L, motor_R);
 }
 
 //   HAL_TIM_Encoder_Start_IT( &htim3,TIM_CHANNEL_ALL);//ENC1
 //   HAL_TIM_Encoder_Start_IT( &htim4,TIM_CHANNEL_ALL);//ENC2
-void calculateEncoderSpeed(float dt){
+void calculateEncoderSpeed(){
 	static int32_t cnt_old_L = 0, cnt_old_R = 0;
 
 	int32_t cnt_new_L = __HAL_TIM_GET_COUNTER(&htim4);
@@ -131,18 +127,23 @@ void calculateEncoderSpeed(float dt){
 
 	int32_t cnt_L = cnt_new_L - cnt_old_L;
 	int32_t cnt_R = cnt_new_R - cnt_old_R;
+
+
+	if (cnt_L > 32767) cnt_L -= 65536;
+	if (cnt_L < -32767) cnt_L += 65536;
+	if (cnt_R > 32767) cnt_R -= 65536;
+	if (cnt_R < -32767) cnt_R += 65536;
+
+	distance_1ms = DISTANCE_PER_CNT * (-cnt_L + cnt_R) / 2;
+	distance_1ms_L = DISTANCE_PER_CNT * cnt_L;
+	distance_1ms_R = DISTANCE_PER_CNT * cnt_R;
+
+
+	if(cnt_new_L != cnt_old_L || cnt_new_R != cnt_old_R){
+		char scnt[100];
+		sprintf(scnt, "Speed: %f\r\n", distance_1ms);
+		HAL_UART_Transmit(&huart2, (uint8_t*)scnt, strlen(scnt) + 1, HAL_MAX_DELAY);
+	}
 	cnt_old_L = cnt_new_L;
     cnt_old_R = cnt_new_R;
-
-	if (cnt_L > 32768) cnt_L -= 65536;
-	if (cnt_L < -32768) cnt_L += 65536;
-	if (cnt_R > 32768) cnt_R -= 65536;
-	if (cnt_R < -32768) cnt_R += 65536;
-
-
-	float wheel_circumference = M_PI * TIRE;
-	current_speed_L = (wheel_circumference * cnt_L) / (ENCODER_CPR * dt);
-	current_speed_R = (wheel_circumference * cnt_R) / (ENCODER_CPR * dt);
-
-
 }
