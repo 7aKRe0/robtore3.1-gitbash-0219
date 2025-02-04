@@ -1,0 +1,2 @@
+../Core/Src/flag.c:12:5:isSensorDisabled	8	static
+../Core/Src/flag.c:16:6:flag	8	static
