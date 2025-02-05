@@ -31,14 +31,17 @@
 #define TIRE 22
 #define M_PI 3.1415926535
 #define ENCODER_CPR 2048  //  CPR のエンコー�?を使用(kari)
-#define Sp 1.0  // 速度制御用 P ゲイン
-#define Si 0.5  // 速度制御用 I ゲイン
 
 
+
+float target_speed = 0;
 
 float base_speed = 0;
 float Kp = 0.7;
 float Kd = 0.6;
+float Sp = 0;
+float Si = 0;
+float Sd = 0;
 float previous_error = 0.0;
 float previous_speed_error_L = 0.0;
 float previous_speed_error_R = 0.0;

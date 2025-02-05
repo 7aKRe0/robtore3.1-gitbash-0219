@@ -1,4 +1,4 @@
 ../Core/Src/control.c:8:6:ControlMotor	48	static
 ../Core/Src/control.c:26:7:calculateError	32	static
-../Core/Src/control.c:68:6:SpeedControl	80	static
-../Core/Src/control.c:122:6:calculateEncoderSpeed	128	static
+../Core/Src/control.c:70:6:calculateEncoderSpeed	128	static
+../Core/Src/control.c:100:6:SpeedControl	96	static

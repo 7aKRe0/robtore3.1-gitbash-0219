@@ -18,6 +18,26 @@ void ButtonPress(void){
 
 }
 
+
+void mapFirstLayer() {
+	stop_flag = 0;
+	target_speed = 30;
+	flag();
+}
+
+void mapSecondLayer() {
+	stop_flag = 0;
+	target_speed = 50;
+	flag();
+}
+
+void mapThirdSeLayer() {
+	stop_flag = 0;
+	target_speed = 80;
+	flag();
+}
+
+
 void loop(){
     while (1)
     {
@@ -64,22 +84,4 @@ void loop(){
 
         
     }
-}
-
-void mapFirstLayer() {
-	stop_flag = 0;
-	target_speed = 30;
-	flag();
-}
-
-void mapSecondLayer() {
-	stop_flag = 0;
-	target_speed = 50;
-	flag();
-}
-
-void mapThirdSeLayer() {
-	stop_flag = 0;
-	target_speed = 80;
-	flag();
 }

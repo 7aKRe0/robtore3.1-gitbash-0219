@@ -8,9 +8,7 @@
 #define dt 0.01
 #define TIRE 22
 #define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
-#define Sp 1.0  // 速度制御用 P ゲイン
-#define Sd 0.5  // 速度制御用 D ゲイン
-#define Si 0.5  // 速度制御用 I ゲイン
+
 
 #ifndef M_PI
 #define M_PI 3.1415926535
@@ -39,7 +37,7 @@ extern int mode;
 extern int mode_processed;
 
 // extern float base_speed;
-extern float Kp, Ki, Kd;
+extern float Kp, Ki, Kd ,Sp, Si, Sd;
 extern float previous_error, integral;
 extern float target_speed;
 extern float current_speed_L, current_speed_R;
