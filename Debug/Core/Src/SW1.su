@@ -1,5 +1,1 @@
-../Core/Src/SW1.c:6:6:ButtonPress	8	static
-../Core/Src/SW1.c:22:6:mapFirstLayer	8	static
-../Core/Src/SW1.c:28:6:mapSecondLayer	8	static
-../Core/Src/SW1.c:34:6:mapThirdSeLayer	8	static
-../Core/Src/SW1.c:41:6:loop	8	static
+../Core/Src/SW1.c:8:6:ButtonPress	8	static
