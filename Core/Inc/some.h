@@ -24,6 +24,17 @@ extern I2C_HandleTypeDef hi2c1;
 extern SPI_HandleTypeDef hspi3;
 
 
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim8;
+
+extern UART_HandleTypeDef huart6;
+
+
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
@@ -90,6 +101,8 @@ void LED_RGB_2(int n);
 void LED(int i);
 float sens_get(void);
 void ButtonPress(void);
+void mode_test(void);
+
 
 
 #endif // TEST_H

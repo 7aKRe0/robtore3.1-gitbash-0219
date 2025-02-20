@@ -1,1 +1,2 @@
-../Core/Src/SW1.c:8:6:ButtonPress	8	static
+../Core/Src/SW1.c:9:6:ButtonPress	8	static
+../Core/Src/SW1.c:32:6:mode_test	8	static

@@ -180,10 +180,10 @@ void SpeedControl_NoENC() {
 
 
 
-	     if (motor_L > 350) motor_L = 200;
-	     if (motor_L < -350) motor_L = -200;
-	     if (motor_R > 350) motor_R = 200;
-	     if (motor_R < -350) motor_R = -200;
+	     if (motor_L > 200) motor_L = 200;
+	     if (motor_L < -200) motor_L = -200;
+	     if (motor_R > 200) motor_R = 200;
+	     if (motor_R < -200) motor_R = -200;
 
 	     // モータ
 	     ControlMotor(motor_L, motor_R);

@@ -3,20 +3,25 @@
 //SW2 PB15 SW1 PC13
 
 int mode =0;
-int mode_processed;
+int calibrate_count =0;
+//int mode_processed;
 
 void ButtonPress(void){
-//    if (HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13) == GPIO_PIN_RESET)//SW1
-//    {
-//
-//    }
+    if (HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13) == GPIO_PIN_RESET)//SW1
+    {
+//    	LED_RGB(6);
+//		HAL_Delay(200);
+//        mode++;
+////        mode_processed = 0;
+//        LED_RGB(0);
+    }
 
     if (HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15) == GPIO_PIN_RESET)//SW2
     {
-    	LED_RGB(2);
+    	LED_RGB(6);
 		HAL_Delay(200);
         mode++;
-        mode_processed = 0;
+//        mode_processed = 0;
         LED_RGB(0);
     }
 
@@ -24,21 +29,27 @@ void ButtonPress(void){
 
 
 
-void test(void){
+void mode_test(void){
 
-	  switch(mode)
+  switch(mode)
 	  {
 	  case 1:
-		  calibrate_sensors();
-		  ControlMotor(0, 0);
+		  LED_RGB(mode);
+		  if(calibrate_count == 0){
+			  calibrate_sensors();
+			  calibrate_count = 1;
+		  }
+//		  LED_RGB(0);
+		  base_speed1=0;
 
 
 		  break;
 
 	  case 2:
 		  LED_RGB(mode);
-		  HAL_Delay(500);
+		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
+
 
 		  base_speed1=-120;
 
@@ -47,8 +58,9 @@ void test(void){
 
 	  case 3:
 		  LED_RGB(mode);
-		  HAL_Delay(500);
+		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
+
 
 
 		  base_speed1=-125;
@@ -57,8 +69,9 @@ void test(void){
 
 	  case 4:
 		  LED_RGB(mode);
-		  HAL_Delay(500);
+		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
+
 
 
 		  base_speed1=-130;
@@ -66,8 +79,9 @@ void test(void){
 		  break;
 
 	  default:
-		  LED_RGB(0);
-		  ControlMotor(0, 0);
+		  LED_RGB(7);
+		  base_speed1=0;
+
 
 		  break;
 

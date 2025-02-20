@@ -158,26 +158,37 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//  int b = 0;
-//  int i =0;
-  calibrate_sensors();
-  HAL_Delay(500);
-  base_speed1=-120;
-// test_flag = 0;
 
- LED_RGB_2(0);
-// flag();
-  HAL_TIM_Base_Start_IT(&htim6);
+//  calibrate_sensors();
+//  HAL_Delay(500);
+//  base_speed1=-120;
 
 
+// LED_RGB_2(0);
+
+//  HAL_TIM_Base_Start_IT(&htim6);
+  test_flag = 0;
+  while (Line3_sens[1] == 0) {
+      ButtonPress();
+      mode_test();
+  }
 	  while(1){
+
+		  ButtonPress();
+		  mode_test();
+
+
+
 				  if(Line3_sens[1] == 0){
 					  while(1){
+						  ButtonPress();
+						  mode_test();
+
+
 						  if(Line3_sens[1] == 1){
 							  test_flag++;
 							  break;
 						  }
-
 					  }
 				  }
 
@@ -185,27 +196,17 @@ int main(void)
 				  LED_RGB_2(7);
 				  HAL_TIM_Base_Stop_IT(&htim6);
 				  ControlMotor(0, 0);
+				  if (HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13) == GPIO_PIN_RESET)//SW1
+				     {
+					  LED_RGB_2(0);
+					  HAL_Delay(300);
+					  test_flag = 0;
 
+				     }
 
 			  }
 
 
-	//sens_get();
-	// SpeedControl_NoENC();
-
-//		  b++;
-//		  i++;
-//
-//		  if(b >=7){
-//			  b =0;
-//		  }
-//		  if(i >=3){
-//			  i=0;
-//		  }
-//		  HAL_Delay(500);
-//		  LED_RGB(b);
-//		  LED_RGB_2(b);
-//		  LED(i);
 
 	  }
 
