@@ -1,5 +1,6 @@
-../Core/Src/sensor.c:28:6:readSens	16	static
-../Core/Src/sensor.c:39:6:readSens2	8	static
-../Core/Src/sensor.c:74:6:calibrate_sensors	16	static
-../Core/Src/sensor.c:104:7:sens_get	32	static
-../Core/Src/sensor.c:160:6:SpeedControl_NoENC	56	static
+../Core/Src/sensor.c:46:6:readSens	16	static
+../Core/Src/sensor.c:57:6:readSens2	8	static
+../Core/Src/sensor.c:64:6:calibrate_sensors	16	static
+../Core/Src/sensor.c:94:7:sens_get	32	static
+../Core/Src/sensor.c:150:6:calculateEncoderSpeed	8	static
+../Core/Src/sensor.c:188:6:SpeedControl_NoENC	56	static

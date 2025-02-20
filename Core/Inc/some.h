@@ -3,12 +3,15 @@
 
 #include <stdint.h>  // uint16_t, uint32_t
 #include "main.h"
+#include"math.h"
 #include <stdio.h>
 
 #define SENSOR_COUNT 13
-#define dt 0.01
+#define dt 0.001
 #define TIRE 22
 #define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
+#define OFFSET  10000
+
 
 
 #ifndef M_PI
@@ -69,6 +72,8 @@ extern uint16_t average_cross;
 extern uint32_t start_time;
 
 extern uint16_t test_flag;
+
+extern int32_t cnt_L;
 
 extern float  Line1_min[SENSOR_COUNT];
 extern float Line1_max[SENSOR_COUNT];

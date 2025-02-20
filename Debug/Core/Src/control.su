@@ -1,3 +1,2 @@
 ../Core/Src/control.c:8:6:ControlMotor	48	static
 ../Core/Src/control.c:27:7:calculateError	32	static
-../Core/Src/control.c:71:6:calculateEncoderSpeed	128	static

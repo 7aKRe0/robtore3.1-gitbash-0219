@@ -1,6 +1,15 @@
 #include "some.h"
 
 
+#define REDUCTION_RATIO 0.4 // 減速比
+#define DISTANCE_PER_CNT (M_PI * TIRE * REDUCTION_RATIO / ENCODER_CPR) //[mm per cnt]
+
+
+float distance_1ms,distance_1ms_L,distance_1ms_R;
+
+static int32_t cnt_old_L = 0, cnt_old_R = 0;
+
+
 float Line1_sens[SENSOR_COUNT];  // 実体の定義
 float Line2_sens[SENSOR_COUNT];
 float Line3_sens[2];  // readSens2() で使用
@@ -17,11 +26,20 @@ float previous_error, integral;
 
 int cross_flag = 0;
 
+
+
 uint32_t start_time = 0;
 
+int32_t cnt_new_L;
+int32_t cnt_new_R;
+int32_t cnt_L;
+int32_t cnt_R;
 
-float Kp = 0.2;
-float Kd = 0.05;
+int32_t accumulation;
+
+
+float Kp = 0.1;
+float Kd = 0.003;
 float base_speed1;
 void MX_ADC1_Init(void);
 
@@ -42,34 +60,6 @@ void readSens2(){
 
 }
 
-
-
-//void calibrate_sensors(void){
-//       for (int i = 0; i < 50000; i++) {
-//           readSens();
-//           readSens2();
-//
-//
-//           for(int k = 0; k < SENSOR_COUNT; k++){
-//        	   if(Line1_sens[k] < min_black_a[k]){
-//        		   min_black_a[k] = Line1_sens[k];
-//        	   }
-//        	   if(Line1_sens[k] > max_white_a[k] ){
-//        		   max_white_a[k] = Line1_sens[k];
-//        	   }
-//
-//        	   if(Line2_sens[k] < min_black_b[k]){
-//        		   min_black_b[k] = Line2_sens[k];
-//        	   }
-//        	   if(Line2_sens[k] > max_white_b[k] ){
-//        		   max_white_b[k] = Line2_sens[k];
-//        	   }
-//        	   }
-//
-//
-//       }
-//
-//   }
 
 void calibrate_sensors(void){    
 
@@ -155,9 +145,48 @@ float sens_get(void){
 }
 
 
+// int32_t cnt_test; //Max value is 2048
+
+void calculateEncoderSpeed(){
+
+//	cnt_new_L =  TIM4 -> CNT - OFFSET; //dL
+//	cnt_new_R =OFFSET- TIM3 -> CNT; //dR
+	cnt_new_L =  TIM4 -> CNT ; //dL
+	cnt_new_R = TIM3 -> CNT; //dR
+
+//	cnt_test = TIM3 -> CNT;
+	cnt_L = cnt_new_L - cnt_old_L;
+	cnt_R = cnt_new_R - cnt_old_R;
+
+
+	if (cnt_L > 32767) cnt_L -= 65536;
+	if (cnt_L < -32767) cnt_L += 65536;
+	if (cnt_R > 32767) cnt_R -= 65536;
+	if (cnt_R < -32767) cnt_R += 65536;
+
+	distance_1ms = DISTANCE_PER_CNT * (-cnt_L + cnt_R) / 2;
+	accumulation += distance_1ms;
+	distance_1ms_L = DISTANCE_PER_CNT * cnt_L;
+	distance_1ms_R = DISTANCE_PER_CNT * cnt_R;
+
+
+
+//	if(cnt_new_L != cnt_old_L || cnt_new_R != cnt_old_R){
+//		char scnt[100];
+////		sprintf(scnt, "Speed: %f\r\n", distance_1ms);
+//
+//	}
+	cnt_old_L = cnt_new_L;
+    cnt_old_R = cnt_new_R;
+
+//    TIM4 -> CNT = OFFSET;
+//    TIM3 -> CNT = OFFSET;
+}
+
 
 
 void SpeedControl_NoENC() {
+
 //		readSens2();
 
 	     float error = sens_get();
@@ -175,15 +204,19 @@ void SpeedControl_NoENC() {
 		     float duty_L =- output+base_speed1;
 		     float duty_R = output+base_speed1;
 
+//	     float duty_L =base_speed1;
+//	     float duty_R = base_speed1;
+
 	     float motor_L = -1*(duty_L);
 	     float motor_R = -1*(duty_R);
 
 
 
-	     if (motor_L > 200) motor_L = 200;
-	     if (motor_L < -200) motor_L = -200;
-	     if (motor_R > 200) motor_R = 200;
-	     if (motor_R < -200) motor_R = -200;
+	     if (motor_L > 350) motor_L = 350;
+	     if (motor_L < -350) motor_L = -350;
+	     if (motor_R > 350) motor_R = 350;
+	     if (motor_R < -350) motor_R = -350;
+
 
 	     // モータ
 	     ControlMotor(motor_L, motor_R);

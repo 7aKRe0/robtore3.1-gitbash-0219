@@ -43,38 +43,52 @@ void mode_test(void){
 		  base_speed1=0;
 
 
+
 		  break;
 
 	  case 2:
 		  LED_RGB(mode);
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
+		  base_speed1=0;
 
 
-		  base_speed1=-120;
+
 
 		  break;
 
 
 	  case 3:
 		  LED_RGB(mode);
-		  HAL_TIM_Base_Start_IT(&htim6);
+//		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
 
 
 		  base_speed1=-125;
 
+
 		  break;
 
 	  case 4:
 		  LED_RGB(mode);
-		  HAL_TIM_Base_Start_IT(&htim6);
+//		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
 
 
-		  base_speed1=-130;
+		  base_speed1=-127;
+		  break;
+
+
+	  case 5:
+		  LED_RGB(mode);
+//		  HAL_TIM_Base_Start_IT(&htim6);
+		  LED_RGB(0);
+
+
+
+		  base_speed1=-129;
 
 		  break;
 
