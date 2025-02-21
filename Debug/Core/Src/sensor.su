@@ -4,4 +4,4 @@
 ../Core/Src/sensor.c:98:7:sens_get	24	static
 ../Core/Src/sensor.c:154:7:calculateEncoderSpeed	8	static
 ../Core/Src/sensor.c:215:7:EncoderSpeed	56	static
-../Core/Src/sensor.c:265:6:SpeedControl_NoENC	48	static
+../Core/Src/sensor.c:265:6:SpeedControl_NoENC	64	static
