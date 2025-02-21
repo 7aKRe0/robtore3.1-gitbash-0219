@@ -100,15 +100,7 @@ float calculateError() {
 
 //void SpeedControl() {
 //
-//    float error = calculateError();
-//    // PD
-//    float derivative = (error - previous_error) / dt;
 //
-//    float P =Kp * error;
-//    float D =Kd * derivative;
-//
-//    float output = P + D;
-//    previous_error = error;//line
 //
 //	calculateEncoderSpeed();//encoder PRG
 //	//speed_error
@@ -154,8 +146,8 @@ float calculateError() {
 //    previous_speed_error_R = adjusted_speed_R;
 //
 //
-//	float motor_L = duty_L - output;
-//    float motor_R = duty_R + output;
+//	float motor_L = duty_L;
+//    float motor_R = duty_R;
 //    // モータ
 //    ControlMotor(motor_L, motor_R);
 //}

@@ -48,6 +48,8 @@ void mode_test(void){
 
 	  case 2:
 		  LED_RGB(mode);
+		  TIM4 -> CNT=32767;
+		  TIM3 -> CNT=32767;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 		  base_speed1=0;

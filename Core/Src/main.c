@@ -69,6 +69,7 @@ static void MX_TIM6_Init(void);
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim6) {
 	SpeedControl_NoENC();
 //	calculateEncoderSpeed();
+//	EncoderSpeed();
 
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {//ADC後にこ�???��?��関数が呼ばれる

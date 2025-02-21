@@ -24,6 +24,9 @@ float Line2_sum = 0;
 
 float previous_error, integral;
 
+float previous_speed_error;
+
+
 int cross_flag = 0;
 
 
@@ -147,25 +150,27 @@ float sens_get(void){
 
 // int32_t cnt_test; //Max value is 2048
 
-void calculateEncoderSpeed(){
+float calculateEncoderSpeed(){
 
 //	cnt_new_L =  TIM4 -> CNT - OFFSET; //dL
 //	cnt_new_R =OFFSET- TIM3 -> CNT; //dR
 	cnt_new_L =  TIM4 -> CNT ; //dL
 	cnt_new_R = TIM3 -> CNT; //dR
 
+	 TIM4 -> CNT=32767;
+	 TIM3 -> CNT=32767;
+
 //	cnt_test = TIM3 -> CNT;
-	cnt_L = cnt_new_L - cnt_old_L;
-	cnt_R = cnt_new_R - cnt_old_R;
+	cnt_L = -(cnt_new_L - 32767);
+	cnt_R = -(cnt_new_R - 32767);
+
+//	cnt_L = cnt_new_L ;
+//	cnt_R = cnt_new_R;
 
 
-	if (cnt_L > 32767) cnt_L -= 65536;
-	if (cnt_L < -32767) cnt_L += 65536;
-	if (cnt_R > 32767) cnt_R -= 65536;
-	if (cnt_R < -32767) cnt_R += 65536;
 
-	distance_1ms = DISTANCE_PER_CNT * (-cnt_L + cnt_R) / 2;
-	accumulation += distance_1ms;
+	distance_1ms = DISTANCE_PER_CNT * (cnt_L + cnt_R) / 2;
+//	accumulation += distance_1ms;
 	distance_1ms_L = DISTANCE_PER_CNT * cnt_L;
 	distance_1ms_R = DISTANCE_PER_CNT * cnt_R;
 
@@ -181,7 +186,56 @@ void calculateEncoderSpeed(){
 
 //    TIM4 -> CNT = OFFSET;
 //    TIM3 -> CNT = OFFSET;
+    return distance_1ms;
 }
+
+
+
+
+float EncoderSpeed() {
+
+
+	float  target_speed = 0;
+	float Sp = 800;
+	float Si = 8000;
+	//speed_error
+	//target_speedを個別に決める
+	target_speed =0.03;
+	float adjusted_speed = target_speed - calculateEncoderSpeed();
+
+	static float integral= 0;
+	integral += adjusted_speed * dt;
+
+
+//    static float previous_adjusted_speed_L = 0, previous_adjusted_speed_R = 0;
+
+
+	//P
+	float speed_P_gain = Sp * adjusted_speed;
+	//I
+    float speed_I_gain = Si * integral;
+
+
+
+	#define I_LIMIT 1000
+	if (integral > I_LIMIT) integral= I_LIMIT;
+	if (integral < -I_LIMIT) integral = -I_LIMIT;
+
+
+	float duty = speed_P_gain + speed_I_gain;
+
+    if (duty > 300) duty = 300;
+    if (duty < -300) duty = -300;
+
+
+    previous_speed_error = adjusted_speed;
+
+
+	float motor = duty;
+    // モータ
+    return duty;
+}
+
 
 
 
@@ -201,14 +255,16 @@ void SpeedControl_NoENC() {
 
 //	     float duty_L = 80 - output;
 //	     float duty_R = 80 + output;
-		     float duty_L =- output+base_speed1;
-		     float duty_R = output+base_speed1;
+//		     float duty_L =- output+base_speed1;
+//		     float duty_R = output+base_speed1;
 
 //	     float duty_L =base_speed1;
 //	     float duty_R = base_speed1;
 
-	     float motor_L = -1*(duty_L);
-	     float motor_R = -1*(duty_R);
+	     float sp =EncoderSpeed();
+
+	     float motor_L = output + sp;
+	     float motor_R = -output + sp;
 
 
 

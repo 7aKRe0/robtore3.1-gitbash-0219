@@ -97,7 +97,7 @@ void readSens(void);
 void readSens2(void);
 void calibrate_sensors();
 void controlMotor(double duty_L, double duty_R);
-void calculateEncoderSpeed();
+float calculateEncoderSpeed();
 void flag();
 void SpeedControl_NoENC();
 void ControlMotor(double duty_L, double duty_R);
@@ -107,6 +107,7 @@ void LED(int i);
 float sens_get(void);
 void ButtonPress(void);
 void mode_test(void);
+float  EncoderSpeed();
 
 
 
