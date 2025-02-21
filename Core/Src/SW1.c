@@ -79,7 +79,7 @@ void mode_test(void){
 		  LED_RGB(0);
 
 
-		  target_speed =1.5;
+		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 //		  base_speed1=-125;
@@ -92,7 +92,7 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =2.7;
+		  target_speed =1.5;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 
@@ -105,7 +105,7 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =3.2;
+		  target_speed =2.7;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 
