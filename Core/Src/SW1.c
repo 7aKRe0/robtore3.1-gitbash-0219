@@ -7,29 +7,38 @@ int calibrate_count =0;
 //int mode_processed;
 
 void ButtonPress(void){
+	mode=0;
+	LED_RGB_2(6);
+	HAL_Delay(1000);
+
+	while(1){
     if (HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13) == GPIO_PIN_RESET)//SW1
     {
-//    	LED_RGB(6);
-//		HAL_Delay(200);
-//        mode++;
-////        mode_processed = 0;
-//        LED_RGB(0);
+    	HAL_Delay(1000);
+    	break;
+
     }
 
     if (HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15) == GPIO_PIN_RESET)//SW2
     {
-    	LED_RGB(6);
+    	mode++;
+    	LED_RGB(mode);
 		HAL_Delay(200);
-        mode++;
+
+        if(mode >7){
+        	mode = 0;
+        }
 //        mode_processed = 0;
-        LED_RGB(0);
+     //   LED_RGB(0);
     }
+	}
 
 }
 
 
 
 void mode_test(void){
+
 
   switch(mode)
 	  {
@@ -40,7 +49,8 @@ void mode_test(void){
 			  calibrate_count = 1;
 		  }
 //		  LED_RGB(0);
-		  base_speed1=0;
+//		  base_speed1=0;
+
 
 
 
@@ -50,13 +60,15 @@ void mode_test(void){
 		  LED_RGB(mode);
 		  TIM4 -> CNT=32767;
 		  TIM3 -> CNT=32767;
+		  LED_RGB_2(3);
+		LED_RGB(3);
+	//	while(1);
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
+		HAL_TIM_Base_Stop_IT(&htim6);
+		ControlMotor(0, 0);
 		  LED_RGB(0);
-		  base_speed1=0;
-
-
-
-
+//		  base_speed1=0;
 		  break;
 
 
@@ -66,8 +78,9 @@ void mode_test(void){
 		  LED_RGB(0);
 
 
+//		  target_speed =0.03;
 
-		  base_speed1=-125;
+//		  base_speed1=-125;
 
 
 		  break;
@@ -77,9 +90,10 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
+//		  target_speed =0.04;
 
 
-		  base_speed1=-127;
+//		  base_speed1=-127;
 		  break;
 
 
@@ -88,15 +102,18 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
+//		  target_speed =0.06;
 
 
-		  base_speed1=-129;
+//		  base_speed1=-129;
 
 		  break;
 
 	  default:
 		  LED_RGB(7);
-		  base_speed1=0;
+//		  base_speed1=0;
+//		  target_speed =0.0;
+
 
 
 		  break;
@@ -104,95 +121,51 @@ void mode_test(void){
 	  }
 }
 
-//void mapFirstLayer() {
-//	stop_flag = 0;
-//	base_speed1 = 80;
-//	flag();
-//}
-//
-//void mapSecondLayer() {
-//	stop_flag = 0;
-//	base_speed1 = 0;
-//
-//	flag();
-//}
-//
-//void mapThirdSeLayer() {
-//	stop_flag = 0;
-//	base_speed1 = 100;
-//
-//	flag();
-//}
+void change_mode(){
+	ButtonPress();
+	mode_test();
+//		calculateEncoderSpeed();
 
+}
 
-//void loop(){
-//    while (1)
-//    {
-//        ButtonPress();
-//
-//        if(!mode_processed){
-//            switch (mode)
-//            {
-//            case 1:
-//                base_speed1 = 0;
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);//R_2-2
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);//G_2-3
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);//B_2-4
-//
-//                calibrate_sensors();
-//
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);//R_2-2
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);//G_2-3
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);//B_2-4
-//
-//                break;
-//
-//            case 2:
-//            	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);//G_1-4
-//            	HAL_Delay(200);
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);//G_1-4
-//
-//                mapFirstLayer();
-//
-//                break;
-//
-//            case 3:
-//            	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);//G_1-4
-//            	HAL_Delay(200);
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);//G_1-4
-//
-//                mapSecondLayer();
-//
-//                break;
-//
-//            case 4:
-//            	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);//G_1-4
-//            	HAL_Delay(200);
-//                HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);//G_1-4
-//                mapThirdSeLayer();
-//                break;
-//
-//            default:
-//                break;
-//            }
-//            mode_processed = 1;
-//        }
-//         if (mode == 2){
-//        	 SpeedControl_NoENC();
-//			  readSens();
-//			  readSens2();
+void test_DD(){
+	test_flag =0;
+	LED_RGB_2(3);
+	while (1) {
+//		readSens2();
+//		test_flag = 1;
+
+		//change_mode();
+
+		if (Line3_sens[1] == 0) {
+			while (1) {
+
+				if (Line3_sens[1] == 1) {
+					test_flag++;
+					break;
+				}
+			}
+		}
+
+		if (test_flag >= 2) {
+			LED_RGB_2(7);
+			HAL_TIM_Base_Stop_IT(&htim6);
+			ControlMotor(0, 0);
+			break;
+//			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)	//SW1
+//					{
+//				LED_RGB_2(0);
+//				HAL_Delay(300);
+//				test_flag = 0;
+//				HAL_TIM_Base_Start_IT(&htim6);
 //
 //
-//        	 flag();
-//
-//           } else if (mode >= 3) {
-//          	 SpeedControl_NoENC();
-//			  readSens();
-//			  readSens2();
-//
-//          	 flag();
-//           }
-//
-//
-//    }
-//}
+//			}
+
+		}
+
+	}
+	HAL_TIM_Base_Stop_IT(&htim6);
+	ControlMotor(0, 0);
+	return 0;
+}

@@ -108,6 +108,8 @@ float sens_get(void);
 void ButtonPress(void);
 void mode_test(void);
 float  EncoderSpeed();
+void test_DD();
+void change_mode();
 
 
 

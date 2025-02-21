@@ -67,9 +67,10 @@ static void MX_TIM6_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim6) {
-	SpeedControl_NoENC();
+//	SpeedControl_NoENC();
 //	calculateEncoderSpeed();
-//	EncoderSpeed();
+	readSens2();
+	EncoderSpeed();
 
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {//ADC後にこ�???��?��関数が呼ばれる
@@ -150,49 +151,15 @@ int main(void) {
 
 	test_flag = 0;
 
-	void change_mode(){
-		ButtonPress();
-		mode_test();
-//		calculateEncoderSpeed();
 
-	}
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	while (Line3_sens[1] == 0) {
-		change_mode();
-	}
 	while (1) {
-//		test_flag = 1;
-
 		change_mode();
-
-		if (Line3_sens[1] == 0) {
-			while (1) {
-				change_mode();
-				if (Line3_sens[1] == 1) {
-					test_flag++;
-					break;
-				}
-			}
-		}
-
-		if (test_flag >= 2) {
-			LED_RGB_2(7);
-//			HAL_TIM_Base_Stop_IT(&htim6);
-			ControlMotor(0, 0);
-			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)	//SW1
-					{
-				LED_RGB_2(0);
-				HAL_Delay(300);
-				test_flag = 0;
-
-			}
-
-		}
-
 	}
+
 	/* USER CODE END WHILE */
 
 	/* USER CODE BEGIN 3 */

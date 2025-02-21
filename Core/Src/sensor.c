@@ -27,6 +27,8 @@ float previous_error, integral;
 float previous_speed_error;
 
 
+float  target_speed = 0;
+
 int cross_flag = 0;
 
 
@@ -71,14 +73,14 @@ void calibrate_sensors(void){
         Line_max[k] = 0.0;     // 初期値
     }
 HAL_Delay(500);
-       while(1){//SW1
+       while(1){//SW2
 
-    	   if(HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_13) == GPIO_PIN_RESET){
+    	   if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15) == GPIO_PIN_RESET){
     		   break;
     	   }
            //readSens();
            LED_RGB_2(2);
-
+           LED_RGB(2);
            for(int k = 0; k < SENSOR_COUNT; k++){
         	   if(Line_sens[k] < Line_min[k]){
         		   Line_min[k] = Line_sens[k];
@@ -195,12 +197,11 @@ float calculateEncoderSpeed(){
 float EncoderSpeed() {
 
 
-	float  target_speed = 0;
 	float Sp = 800;
 	float Si = 8000;
 	//speed_error
 	//target_speedを個別に決める
-	target_speed =0.03;
+	target_speed =0.0;
 	float adjusted_speed = target_speed - calculateEncoderSpeed();
 
 	static float integral= 0;
@@ -232,6 +233,10 @@ float EncoderSpeed() {
 
 
 	float motor = duty;
+
+
+    ControlMotor(motor, motor);
+
     // モータ
     return duty;
 }
