@@ -5127,9 +5127,8 @@ LOAD c:/st/stm32cubeide_1.11.2/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
                 0x0000000008002298                sens_get
  *fill*         0x000000000800245c        0x4 
  .text.calculateEncoderSpeed
-                0x0000000008002460      0x19c ./Core/Src/sensor.o
+                0x0000000008002460      0x1a0 ./Core/Src/sensor.o
                 0x0000000008002460                calculateEncoderSpeed
- *fill*         0x00000000080025fc        0x4 
  .text.EncoderSpeed
                 0x0000000008002600      0x174 ./Core/Src/sensor.o
                 0x0000000008002600                EncoderSpeed

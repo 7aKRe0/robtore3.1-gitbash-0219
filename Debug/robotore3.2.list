@@ -1768,7 +1768,7 @@ void mode_test(void){
  80012e0:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
  80012e4:	080012f9 	.word	0x080012f9
  80012e8:	08001317 	.word	0x08001317
- 80012ec:	08001351 	.word	0x08001351
+ 80012ec:	08001353 	.word	0x08001353
  80012f0:	08001375 	.word	0x08001375
  80012f4:	08001397 	.word	0x08001397
 	  {
@@ -1810,48 +1810,48 @@ void mode_test(void){
 		  LED_RGB(3);
  8001326:	2003      	movs	r0, #3
  8001328:	f7ff fe30 	bl	8000f8c <LED_RGB>
-		  target_speed =0.8;
+		  target_speed =1.5;
  800132c:	4b2a      	ldr	r3, [pc, #168]	; (80013d8 <mode_test+0x108>)
- 800132e:	4a2b      	ldr	r2, [pc, #172]	; (80013dc <mode_test+0x10c>)
- 8001330:	601a      	str	r2, [r3, #0]
+ 800132e:	f04f 527f 	mov.w	r2, #1069547520	; 0x3fc00000
+ 8001332:	601a      	str	r2, [r3, #0]
 
 	//	while(1);
 		  HAL_TIM_Base_Start_IT(&htim6);
- 8001332:	482b      	ldr	r0, [pc, #172]	; (80013e0 <mode_test+0x110>)
- 8001334:	f004 f890 	bl	8005458 <HAL_TIM_Base_Start_IT>
+ 8001334:	4829      	ldr	r0, [pc, #164]	; (80013dc <mode_test+0x10c>)
+ 8001336:	f004 f88f 	bl	8005458 <HAL_TIM_Base_Start_IT>
 		  test_DD();
- 8001338:	f000 f862 	bl	8001400 <test_DD>
+ 800133a:	f000 f861 	bl	8001400 <test_DD>
 //		HAL_TIM_Base_Stop_IT(&htim6);
 		ControlMotor(0, 0);
- 800133c:	ed9f 1b22 	vldr	d1, [pc, #136]	; 80013c8 <mode_test+0xf8>
- 8001340:	ed9f 0b21 	vldr	d0, [pc, #132]	; 80013c8 <mode_test+0xf8>
- 8001344:	f000 f8b4 	bl	80014b0 <ControlMotor>
+ 800133e:	ed9f 1b22 	vldr	d1, [pc, #136]	; 80013c8 <mode_test+0xf8>
+ 8001342:	ed9f 0b21 	vldr	d0, [pc, #132]	; 80013c8 <mode_test+0xf8>
+ 8001346:	f000 f8b3 	bl	80014b0 <ControlMotor>
 		  LED_RGB(0);
- 8001348:	2000      	movs	r0, #0
- 800134a:	f7ff fe1f 	bl	8000f8c <LED_RGB>
+ 800134a:	2000      	movs	r0, #0
+ 800134c:	f7ff fe1e 	bl	8000f8c <LED_RGB>
 //		  base_speed1=0;
 		  break;
- 800134e:	e038      	b.n	80013c2 <mode_test+0xf2>
+ 8001350:	e037      	b.n	80013c2 <mode_test+0xf2>
 
 
 	  case 3:
 		  LED_RGB(mode);
- 8001350:	4b1f      	ldr	r3, [pc, #124]	; (80013d0 <mode_test+0x100>)
- 8001352:	681b      	ldr	r3, [r3, #0]
- 8001354:	4618      	mov	r0, r3
- 8001356:	f7ff fe19 	bl	8000f8c <LED_RGB>
+ 8001352:	4b1f      	ldr	r3, [pc, #124]	; (80013d0 <mode_test+0x100>)
+ 8001354:	681b      	ldr	r3, [r3, #0]
+ 8001356:	4618      	mov	r0, r3
+ 8001358:	f7ff fe18 	bl	8000f8c <LED_RGB>
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
- 800135a:	2000      	movs	r0, #0
- 800135c:	f7ff fe16 	bl	8000f8c <LED_RGB>
+ 800135c:	2000      	movs	r0, #0
+ 800135e:	f7ff fe15 	bl	8000f8c <LED_RGB>
 
 
-		  target_speed =1.0;
- 8001360:	4b1d      	ldr	r3, [pc, #116]	; (80013d8 <mode_test+0x108>)
- 8001362:	f04f 527e 	mov.w	r2, #1065353216	; 0x3f800000
+		  target_speed =2.4;
+ 8001362:	4b1d      	ldr	r3, [pc, #116]	; (80013d8 <mode_test+0x108>)
+ 8001364:	4a1e      	ldr	r2, [pc, #120]	; (80013e0 <mode_test+0x110>)
  8001366:	601a      	str	r2, [r3, #0]
 		  HAL_TIM_Base_Start_IT(&htim6);
- 8001368:	481d      	ldr	r0, [pc, #116]	; (80013e0 <mode_test+0x110>)
+ 8001368:	481c      	ldr	r0, [pc, #112]	; (80013dc <mode_test+0x10c>)
  800136a:	f004 f875 	bl	8005458 <HAL_TIM_Base_Start_IT>
 		  test_DD();
  800136e:	f000 f847 	bl	8001400 <test_DD>
@@ -1872,12 +1872,12 @@ void mode_test(void){
  800137e:	2000      	movs	r0, #0
  8001380:	f7ff fe04 	bl	8000f8c <LED_RGB>
 
-		  target_speed =1.2;
+		  target_speed =2.7;
  8001384:	4b14      	ldr	r3, [pc, #80]	; (80013d8 <mode_test+0x108>)
  8001386:	4a17      	ldr	r2, [pc, #92]	; (80013e4 <mode_test+0x114>)
  8001388:	601a      	str	r2, [r3, #0]
 		  HAL_TIM_Base_Start_IT(&htim6);
- 800138a:	4815      	ldr	r0, [pc, #84]	; (80013e0 <mode_test+0x110>)
+ 800138a:	4814      	ldr	r0, [pc, #80]	; (80013dc <mode_test+0x10c>)
  800138c:	f004 f864 	bl	8005458 <HAL_TIM_Base_Start_IT>
 		  test_DD();
  8001390:	f000 f836 	bl	8001400 <test_DD>
@@ -1898,12 +1898,12 @@ void mode_test(void){
  80013a0:	2000      	movs	r0, #0
  80013a2:	f7ff fdf3 	bl	8000f8c <LED_RGB>
 
-		  target_speed =1.4;
+		  target_speed =3.0;
  80013a6:	4b0c      	ldr	r3, [pc, #48]	; (80013d8 <mode_test+0x108>)
  80013a8:	4a0f      	ldr	r2, [pc, #60]	; (80013e8 <mode_test+0x118>)
  80013aa:	601a      	str	r2, [r3, #0]
 		  HAL_TIM_Base_Start_IT(&htim6);
- 80013ac:	480c      	ldr	r0, [pc, #48]	; (80013e0 <mode_test+0x110>)
+ 80013ac:	480b      	ldr	r0, [pc, #44]	; (80013dc <mode_test+0x10c>)
  80013ae:	f004 f853 	bl	8005458 <HAL_TIM_Base_Start_IT>
 		  test_DD();
  80013b2:	f000 f825 	bl	8001400 <test_DD>
@@ -1936,10 +1936,10 @@ void mode_test(void){
  80013d0:	20000234 	.word	0x20000234
  80013d4:	20000238 	.word	0x20000238
  80013d8:	20000634 	.word	0x20000634
- 80013dc:	3f4ccccd 	.word	0x3f4ccccd
- 80013e0:	200004b8 	.word	0x200004b8
- 80013e4:	3f99999a 	.word	0x3f99999a
- 80013e8:	3fb33333 	.word	0x3fb33333
+ 80013dc:	200004b8 	.word	0x200004b8
+ 80013e0:	4019999a 	.word	0x4019999a
+ 80013e4:	402ccccd 	.word	0x402ccccd
+ 80013e8:	40400000 	.word	0x40400000
 
 080013ec <change_mode>:
 
@@ -4704,10 +4704,10 @@ float calculateEncoderSpeed(){
  8002564:	ee77 7a27 	vadd.f32	s15, s14, s15
  8002568:	4b21      	ldr	r3, [pc, #132]	; (80025f0 <calculateEncoderSpeed+0x190>)
  800256a:	edc3 7a00 	vstr	s15, [r3]
-		if(accumulation >8){
+		if(accumulation >800){
  800256e:	4b20      	ldr	r3, [pc, #128]	; (80025f0 <calculateEncoderSpeed+0x190>)
  8002570:	edd3 7a00 	vldr	s15, [r3]
- 8002574:	eeb2 7a00 	vmov.f32	s14, #32	; 0x41000000  8.0
+ 8002574:	ed9f 7a1f 	vldr	s14, [pc, #124]	; 80025f4 <calculateEncoderSpeed+0x194>
  8002578:	eef4 7ac7 	vcmpe.f32	s15, s14
  800257c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
  8002580:	dd09      	ble.n	8002596 <calculateEncoderSpeed+0x136>
@@ -4730,12 +4730,12 @@ float calculateEncoderSpeed(){
 	cnt_old_L = cnt_new_L;
  8002596:	4b0b      	ldr	r3, [pc, #44]	; (80025c4 <calculateEncoderSpeed+0x164>)
  8002598:	681b      	ldr	r3, [r3, #0]
- 800259a:	4a16      	ldr	r2, [pc, #88]	; (80025f4 <calculateEncoderSpeed+0x194>)
+ 800259a:	4a17      	ldr	r2, [pc, #92]	; (80025f8 <calculateEncoderSpeed+0x198>)
  800259c:	6013      	str	r3, [r2, #0]
     cnt_old_R = cnt_new_R;
  800259e:	4b0b      	ldr	r3, [pc, #44]	; (80025cc <calculateEncoderSpeed+0x16c>)
  80025a0:	681b      	ldr	r3, [r3, #0]
- 80025a2:	4a15      	ldr	r2, [pc, #84]	; (80025f8 <calculateEncoderSpeed+0x198>)
+ 80025a2:	4a16      	ldr	r2, [pc, #88]	; (80025fc <calculateEncoderSpeed+0x19c>)
  80025a4:	6013      	str	r3, [r2, #0]
 
 //    TIM4 -> CNT = OFFSET;
@@ -4763,9 +4763,9 @@ float calculateEncoderSpeed(){
  80025e8:	437a0000 	.word	0x437a0000
  80025ec:	20000638 	.word	0x20000638
  80025f0:	2000064c 	.word	0x2000064c
- 80025f4:	20000598 	.word	0x20000598
- 80025f8:	2000059c 	.word	0x2000059c
- 80025fc:	00000000 	.word	0x00000000
+ 80025f4:	44480000 	.word	0x44480000
+ 80025f8:	20000598 	.word	0x20000598
+ 80025fc:	2000059c 	.word	0x2000059c
 
 08002600 <EncoderSpeed>:
 

@@ -43,7 +43,7 @@ float  accumulation;
 
 
 float Kp = 0.1;
-float Kd = 0.003;
+float Kd = 0.002;
 float base_speed1;
 void MX_ADC1_Init(void);
 
@@ -186,7 +186,7 @@ float calculateEncoderSpeed(){
 	if(cross_flag == 1){
 		 LED_RGB(1);
 		accumulation +=distance_1ms;
-		if(accumulation >8){
+		if(accumulation >800){
 			cross_flag = 0;
 			accumulation = 0;
 			LED_RGB(0);
