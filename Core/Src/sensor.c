@@ -32,7 +32,6 @@ float  target_speed = 0;
 int cross_flag = 0;
 
 
-
 uint32_t start_time = 0;
 
 int32_t cnt_new_L;
@@ -40,7 +39,7 @@ int32_t cnt_new_R;
 int32_t cnt_L;
 int32_t cnt_R;
 
-int32_t accumulation;
+float  accumulation;
 
 
 float Kp = 0.1;
@@ -126,25 +125,25 @@ float sens_get(void){
 		Line2_sum =Line_sum[7]+Line_sum[8]+Line_sum[9]+Line_sum[10]+Line_sum[11];
 
 
-		uint16_t  average_cross = Line_sum[2] + Line_sum[10];
-		if(average_cross <600){
-			 cross_flag = 1;
-			 start_time = HAL_GetTick();
-		}
-
-		if(cross_flag == 1){
-			LED_RGB(4);
-			if((HAL_GetTick() - start_time) < 400){
-				LED_RGB(2);
-			}else{
-			cross_flag = 0;
-			LED_RGB(1);
-			}
-
-		}else{
-			readSens2();
-		}
-
+		average_cross = (Line_sum[2] + Line_sum[10])/2;
+//		if(average_cross <600){
+//			 cross_flag = 1;
+//			 start_time = HAL_GetTick();
+//		}
+//
+//		if(cross_flag == 1){
+//			LED_RGB(4);
+//			if((HAL_GetTick() - start_time) < 400){
+//				LED_RGB(2);
+//			}else{
+//			cross_flag = 0;
+//			LED_RGB(1);
+//			}
+//
+//		}else{
+//			readSens2();
+//		}
+//
 
 	return  Line1_sum - Line2_sum;
 }
@@ -176,6 +175,25 @@ float calculateEncoderSpeed(){
 	distance_1ms_L = DISTANCE_PER_CNT * cnt_L;
 	distance_1ms_R = DISTANCE_PER_CNT * cnt_R;
 
+	//float side_time = 80/distance_1ms;
+
+
+	if(average_cross <250){
+		 cross_flag = 1;
+		// start_time = HAL_GetTick();
+	}
+
+	if(cross_flag == 1){
+		 LED_RGB(1);
+		accumulation +=distance_1ms;
+		if(accumulation >8){
+			cross_flag = 0;
+			accumulation = 0;
+			LED_RGB(0);
+		}
+	}else{
+//		readSens2();
+	}
 
 
 //	if(cnt_new_L != cnt_old_L || cnt_new_R != cnt_old_R){
@@ -201,7 +219,7 @@ float EncoderSpeed() {
 	float Si = 8000;
 	//speed_error
 	//target_speedを個別に決める
-	target_speed =0.0;
+//	target_speed =0.3;
 	float adjusted_speed = target_speed - calculateEncoderSpeed();
 
 	static float integral= 0;

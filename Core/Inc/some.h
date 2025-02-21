@@ -67,7 +67,7 @@ extern float Line3_sens[2];
 extern float cross_time;
 
 extern int cross_flag;
-extern uint16_t average_cross;
+extern float average_cross;
 
 extern uint32_t start_time;
 

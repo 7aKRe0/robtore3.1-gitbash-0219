@@ -58,14 +58,15 @@ void mode_test(void){
 
 	  case 2:
 		  LED_RGB(mode);
-		  TIM4 -> CNT=32767;
-		  TIM3 -> CNT=32767;
+
 		  LED_RGB_2(3);
-		LED_RGB(3);
+		  LED_RGB(3);
+		  target_speed =0.8;
+
 	//	while(1);
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
-		HAL_TIM_Base_Stop_IT(&htim6);
+//		HAL_TIM_Base_Stop_IT(&htim6);
 		ControlMotor(0, 0);
 		  LED_RGB(0);
 //		  base_speed1=0;
@@ -78,8 +79,9 @@ void mode_test(void){
 		  LED_RGB(0);
 
 
-//		  target_speed =0.03;
-
+		  target_speed =1.0;
+		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
 //		  base_speed1=-125;
 
 
@@ -90,8 +92,9 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-//		  target_speed =0.04;
-
+		  target_speed =1.2;
+		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
 
 //		  base_speed1=-127;
 		  break;
@@ -102,8 +105,9 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-//		  target_speed =0.06;
-
+		  target_speed =1.4;
+		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
 
 //		  base_speed1=-129;
 
@@ -130,6 +134,8 @@ void change_mode(){
 
 void test_DD(){
 	test_flag =0;
+	TIM4 -> CNT=32767;
+	TIM3 -> CNT=32767;
 	LED_RGB_2(3);
 	while (1) {
 //		readSens2();
@@ -137,7 +143,7 @@ void test_DD(){
 
 		//change_mode();
 
-		if (Line3_sens[1] == 0) {
+		if (Line3_sens[1] == 0 && cross_flag ==0) {
 			while (1) {
 
 				if (Line3_sens[1] == 1) {

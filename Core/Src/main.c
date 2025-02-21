@@ -22,7 +22,7 @@
 /* USER CODE BEGIN PM */
 
 uint16_t test_flag;
-uint16_t average_cross;
+float average_cross;
 
 /* USER CODE END PM */
 
@@ -67,10 +67,12 @@ static void MX_TIM6_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim6) {
-//	SpeedControl_NoENC();
+	SpeedControl_NoENC();
 //	calculateEncoderSpeed();
+
+
 	readSens2();
-	EncoderSpeed();
+//	EncoderSpeed();
 
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {//ADC後にこ�???��?��関数が呼ばれる
