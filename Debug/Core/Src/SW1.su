@@ -1,4 +1,4 @@
 ../Core/Src/SW1.c:9:6:ButtonPress	8	static
 ../Core/Src/SW1.c:40:6:mode_test	8	static
-../Core/Src/SW1.c:128:6:change_mode	8	static
-../Core/Src/SW1.c:135:6:test_DD	8	static
+../Core/Src/SW1.c:154:6:change_mode	8	static
+../Core/Src/SW1.c:161:6:test_DD	8	static

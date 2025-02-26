@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := robotore3.2
+BUILD_ARTIFACT_NAME := robotore3.32
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-robotore3.2.elf \
+robotore3.32.elf \
 
 MAP_FILES += \
-robotore3.2.map \
+robotore3.32.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-robotore3.2.list \
+robotore3.32.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: robotore3.2.elf secondary-outputs
+main-build: robotore3.32.elf secondary-outputs
 
 # Tool invocations
-robotore3.2.elf robotore3.2.map: $(OBJS) $(USER_OBJS) C:\Users\uchuu\STM32CubeIDE\workspace_1.11.2\robotore3.2\STM32F405RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "robotore3.2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\uchuu\STM32CubeIDE\workspace_1.11.2\robotore3.2\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="robotore3.2.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+robotore3.32.elf robotore3.32.map: $(OBJS) $(USER_OBJS) C:\Users\uchuu\STM32CubeIDE\workspace_1.11.2\robotore3.32\STM32F405RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "robotore3.32.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\uchuu\STM32CubeIDE\workspace_1.11.2\robotore3.32\STM32F405RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="robotore3.32.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-robotore3.2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "robotore3.2.list"
+robotore3.32.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "robotore3.32.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout robotore3.2.elf robotore3.2.list robotore3.2.map
+	-$(RM) default.size.stdout robotore3.32.elf robotore3.32.list robotore3.32.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

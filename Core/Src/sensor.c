@@ -39,10 +39,15 @@ int32_t cnt_new_R;
 int32_t cnt_L;
 int32_t cnt_R;
 
+
+int32_t test_cnt_L;
+int32_t test_cnt_R;
+
+
 float  accumulation;
 
 
-float Kp = 0.12;
+float Kp = 0.1;
 float Kd = 0.002;
 float base_speed1;
 void MX_ADC1_Init(void);
@@ -116,32 +121,13 @@ float sens_get(void){
 		if(Line_sum[i]>1000)Line_sum[i]=1000;
 
 	}
-//	for(int k = 1; k < 6;k++){
-//		Line1_sum +=Line_sum[k];
-//		Line2_sum +=Line_sum[k+6];
-//
-//	}
+
 		Line1_sum =Line_sum[1]+Line_sum[2]+Line_sum[3]+Line_sum[4]+Line_sum[5];
 		Line2_sum =Line_sum[7]+Line_sum[8]+Line_sum[9]+Line_sum[10]+Line_sum[11];
 
 
 		average_cross = (Line_sum[2] + Line_sum[10])/2;
-//		if(average_cross <600){
-//			 cross_flag = 1;
-//			 start_time = HAL_GetTick();
-//		}
-//
-//		if(cross_flag == 1){
-//			LED_RGB(4);
-//			if((HAL_GetTick() - start_time) < 400){
-//				LED_RGB(2);
-//			}else{
-//			cross_flag = 0;
-//			LED_RGB(1);
-//			}
-//
-//		}else{
-//			readSens2();
+
 //		}
 //
 
@@ -153,20 +139,20 @@ float sens_get(void){
 
 float calculateEncoderSpeed(){
 
-//	cnt_new_L =  TIM4 -> CNT - OFFSET; //dL
-//	cnt_new_R =OFFSET- TIM3 -> CNT; //dR
+
 	cnt_new_L =  TIM4 -> CNT ; //dL
 	cnt_new_R = TIM3 -> CNT; //dR
 
 	 TIM4 -> CNT=32767;
 	 TIM3 -> CNT=32767;
 
-//	cnt_test = TIM3 -> CNT;
+//	 test_cnt_L =TIM4 -> CNT ;
+//	 test_cnt_R =TIM3 -> CNT;
+
 	cnt_L = -(cnt_new_L - 32767);
 	cnt_R = -(cnt_new_R - 32767);
 
-//	cnt_L = cnt_new_L ;
-//	cnt_R = cnt_new_R;
+
 
 
 
@@ -175,14 +161,12 @@ float calculateEncoderSpeed(){
 	distance_1ms_L = DISTANCE_PER_CNT * cnt_L;
 	distance_1ms_R = DISTANCE_PER_CNT * cnt_R;
 
-	//float side_time = 80/distance_1ms;
 
 
 	if(average_cross <250){
 		 cross_flag = 1;
 		 accumulation = 0;
 		 LED_RGB(1);
-		// start_time = HAL_GetTick();
 	}
 
 	if(cross_flag == 1){
@@ -194,20 +178,14 @@ float calculateEncoderSpeed(){
 			LED_RGB(0);
 		}
 	}else{
-//		readSens2();
 	}
 
 
-//	if(cnt_new_L != cnt_old_L || cnt_new_R != cnt_old_R){
-//		char scnt[100];
-////		sprintf(scnt, "Speed: %f\r\n", distance_1ms);
-//
-//	}
+
 	cnt_old_L = cnt_new_L;
     cnt_old_R = cnt_new_R;
 
-//    TIM4 -> CNT = OFFSET;
-//    TIM3 -> CNT = OFFSET;
+
     return distance_1ms;
 }
 
@@ -219,16 +197,12 @@ float EncoderSpeed() {
 
 	float Sp = 800;
 	float Si = 8000;
-	//speed_error
-	//target_speedを個別に決める
-//	target_speed =0.3;
+
 	float adjusted_speed = target_speed - calculateEncoderSpeed();
 
 	static float integral= 0;
 	integral += adjusted_speed * dt;
 
-
-//    static float previous_adjusted_speed_L = 0, previous_adjusted_speed_R = 0;
 
 
 	//P
@@ -245,22 +219,18 @@ float EncoderSpeed() {
 
 	float duty = speed_P_gain + speed_I_gain;
 
-    if (duty > 300) duty = 300;
-    if (duty < -300) duty = -300;
+    if (duty > 250) duty = 250;
+    if (duty < -250) duty = -250;
 
 
     previous_speed_error = adjusted_speed;
 
 
-//	float motor = duty;
 
-
-//    ControlMotor(motor, motor);
 
     // モータ
     return duty;
 }
-
 
 
 
@@ -278,66 +248,49 @@ void SpeedControl_NoENC() {
 	     float output = P + D;
 	     previous_error = error;
 
-//	     float duty_L = 80 - output;
-//	     float duty_R = 80 + output;
-//		     float duty_L =- output+base_speed1;
-//		     float duty_R = output+base_speed1;
-
-//	     float duty_L =base_speed1;
-//	     float duty_R = base_speed1;
-
 	     float sp =EncoderSpeed();
 
 	     float motor_L = output + sp;
 	     float motor_R = -output + sp;
 
 
-//	     float max_output = 449;
+	     float max_output = 499;
 
 
-//	     float overflow_L = 0;
-//	     float overflow_R = 0;
+	     float overflow_L = 0;
+	     float overflow_R = 0;
 
-	     if (motor_L > 350) motor_L = 350;
-	     if (motor_L < -350) motor_L = -350;
-	     if (motor_R > 350) motor_R = 350;
-	     if (motor_R < -350) motor_R = -350;
+	     if (motor_L > max_output) {
+	         overflow_L = motor_L - max_output;
+	         motor_L = max_output;
+	     } else if (motor_L < -max_output) {
+	         overflow_L = motor_L - max_output;
+	         motor_L = -max_output;
+	     }
+
+	     if (motor_R > max_output) {
+	         overflow_R = motor_R - max_output;
+	         motor_R = max_output;
+	     } else if (motor_R < -max_output) {
+	         overflow_R = motor_R - max_output;
+	         motor_R = -max_output;
+	     }
 
 
 
+	     if (overflow_L > 0) {
+	         motor_R -= overflow_L;
+	     }
+	     if (overflow_L < 0) {
+	         motor_R += overflow_L;
+	     }
+	     if (overflow_R > 0) {
+	         motor_L -= overflow_R;
+	     }
+	     if (overflow_R < 0) {
+	         motor_L += overflow_R;
+	     }
 
-
-//	     if (motor_L > max_output) {
-//	         overflow_L = motor_L - max_output;
-//	         motor_L = max_output;
-//	     } else if (motor_L < -max_output) {
-//	         overflow_L = motor_L - max_output;
-//	         motor_L = -max_output;
-//	     }
-//
-//	     if (motor_R > max_output) {
-//	         overflow_R = motor_R - max_output;
-//	         motor_R = max_output;
-//	     } else if (motor_R < -max_output) {
-//	         overflow_R = motor_R - max_output;
-//	         motor_R = -max_output;
-//	     }
-//
-//
-//
-//	     if (overflow_L > 0) {
-//	         motor_R -= overflow_L;
-//	     }
-//	     if (overflow_L < 0) {
-//	         motor_R += overflow_L;
-//	     }
-//	     if (overflow_R > 0) {
-//	         motor_L -= overflow_R;
-//	     }
-//	     if (overflow_R < 0) {
-//	         motor_L += overflow_R;
-//	     }
-//
 
 	     // モータ
 	     ControlMotor(motor_L, motor_R);

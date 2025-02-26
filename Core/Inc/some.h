@@ -93,6 +93,11 @@ extern float min_black_0, min_black_1;
 extern float max_white_0;
 extern float max_white_1;
 
+
+
+extern float distance_1ms,distance_1ms_L,distance_1ms_R,accumulation;
+
+
 void readSens(void);
 void readSens2(void);
 void calibrate_sensors();

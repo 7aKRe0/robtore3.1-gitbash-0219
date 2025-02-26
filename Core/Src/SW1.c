@@ -61,7 +61,7 @@ void mode_test(void){
 
 		  LED_RGB_2(3);
 		  LED_RGB(3);
-		  target_speed =0.0;
+		  target_speed =1.4;
 
 	//	while(1);
 		  HAL_TIM_Base_Start_IT(&htim6);
@@ -79,7 +79,7 @@ void mode_test(void){
 		  LED_RGB(0);
 
 
-		  target_speed =1.0;
+		  target_speed =1.8;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 //		  base_speed1=-125;
@@ -92,7 +92,7 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =1.5;
+		  target_speed =2.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 
@@ -105,7 +105,33 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =2.7;
+		  target_speed =2.8;
+		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
+
+//		  base_speed1=-129;
+
+		  break;
+
+	  case 6:
+		  LED_RGB(mode);
+//		  HAL_TIM_Base_Start_IT(&htim6);
+		  LED_RGB(0);
+
+		  target_speed =3.1;
+		  HAL_TIM_Base_Start_IT(&htim6);
+		  test_DD();
+
+//		  base_speed1=-129;
+
+		  break;
+
+	  case 7:
+		  LED_RGB(mode);
+//		  HAL_TIM_Base_Start_IT(&htim6);
+		  LED_RGB(0);
+
+		  target_speed =3.2;
 		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 
@@ -154,23 +180,35 @@ void test_DD(){
 		}
 
 		if (test_flag >= 2) {
-			LED_RGB_2(7);
-			HAL_TIM_Base_Stop_IT(&htim6);
-			ControlMotor(0, 0);
+				LED_RGB_2(7);
+				HAL_TIM_Base_Stop_IT(&htim6);
+				ControlMotor(0, 0);
 			break;
-//			if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET)	//SW1
-//					{
-//				LED_RGB_2(0);
-//				HAL_Delay(300);
-//				test_flag = 0;
-//				HAL_TIM_Base_Start_IT(&htim6);
-//
-//
-//			}
+
 
 		}
 
 	}
+
+	calculateEncoderSpeed();
+	HAL_TIM_Base_Start_IT(&htim6);
+
+
+	 accumulation = 0;
+	 target_speed = 1.1;
+     calculateEncoderSpeed();
+ 	LED_RGB_2(5);
+
+
+
+	    while (accumulation < 45) {
+	        accumulation += distance_1ms;
+//	        ControlMotor(110, 110);
+	        HAL_Delay(10);
+	    }
+
+
+	LED_RGB_2(2);
 	HAL_TIM_Base_Stop_IT(&htim6);
 	ControlMotor(0, 0);
 	return 0;

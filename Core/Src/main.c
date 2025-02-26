@@ -152,6 +152,7 @@ int main(void) {
 	ControlMotor(0, 0);
 
 	test_flag = 0;
+//	HAL_TIM_Base_Start_IT(&htim6);
 
 
 	/* USER CODE END 2 */
