@@ -48,7 +48,7 @@ float  accumulation;
 
 
 float Kp = 0.1;
-float Kd = 0.002;
+float Kd = 0.001;
 float base_speed1;
 void MX_ADC1_Init(void);
 
