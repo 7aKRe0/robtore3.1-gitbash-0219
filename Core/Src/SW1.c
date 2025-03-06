@@ -132,8 +132,11 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =3.2;
-		  HAL_TIM_Base_Start_IT(&htim6);
+		  target_speed =0.0;
+
+		  PrintVelocityData();
+
+//		  HAL_TIM_Base_Start_IT(&htim6);
 		  test_DD();
 
 //		  base_speed1=-129;

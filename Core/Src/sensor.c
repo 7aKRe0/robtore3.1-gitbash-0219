@@ -4,6 +4,8 @@
 #define REDUCTION_RATIO 0.4 // 減速比
 #define DISTANCE_PER_CNT (M_PI * TIRE * REDUCTION_RATIO / ENCODER_CPR) //[mm per cnt]
 
+//#define MAX_RECORDS 500000
+
 
 float distance_1ms,distance_1ms_L,distance_1ms_R;
 
@@ -17,41 +19,35 @@ float Line3_sens[2];  // readSens2() で使用
 uint16_t Line_sens[13];
 float  Line_min[SENSOR_COUNT] = {3000, 3000, 3000, 3000, 3000, 3000,3000, 3000, 3000, 3000, 3000, 3000,3000};
 float Line_max[SENSOR_COUNT] = {0,0,0,0,0,0,0,0,0,0,0,0,0};
-
 float Line_sum[SENSOR_COUNT];
 float Line1_sum = 0;
 float Line2_sum = 0;
-
 float previous_error, integral;
-
 float previous_speed_error;
-
-
 float  target_speed = 0;
-
 int cross_flag = 0;
 
 
 uint32_t start_time = 0;
-
 int32_t cnt_new_L;
 int32_t cnt_new_R;
 int32_t cnt_L;
 int32_t cnt_R;
-
-
 int32_t test_cnt_L;
 int32_t test_cnt_R;
 
 
 float  accumulation;
-
-
 float Kp = 0.1;
 float Kd = 0.001;
 float base_speed1;
-void MX_ADC1_Init(void);
 
+
+int32_t VP_L[MAX_RECORDS] = {0};
+int32_t VP_R[MAX_RECORDS] = {0};
+
+
+void MX_ADC1_Init(void);
 void readSens(void){
 
 
@@ -298,4 +294,22 @@ void SpeedControl_NoENC() {
 
 
 
+void VelocityPlan(){
+	static uint16_t index = 0;
+
+
+
+	if (index < MAX_RECORDS) {
+	        VP_L[index] = cnt_L;
+	        VP_R[index] = cnt_R;
+	        index++;
+	    }
+	}
+
+void PrintVelocityData() {
+    printf("=== Velocity Data ===\r\n");
+    for (uint16_t i = 0; i < MAX_RECORDS; i++) {
+        printf("L[%d]: %ld, R[%d]: %ld\r\n", i, VP_L[i], i, VP_R[i]);
+    }
+}
 

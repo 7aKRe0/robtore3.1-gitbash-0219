@@ -161,6 +161,12 @@ int main(void) {
 	/* USER CODE BEGIN WHILE */
 	while (1) {
 		change_mode();
+
+//		 printf("USART6 test\r\n");
+//		 HAL_Delay(1000);
+
+//		 HAL_UART_Transmit(&huart6, (uint8_t*)"USART6 test\r\n", 13, HAL_MAX_DELAY);
+
 	}
 
 	/* USER CODE END WHILE */

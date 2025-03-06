@@ -1,7 +1,9 @@
-../Core/Src/sensor.c:55:6:readSens	16	static
-../Core/Src/sensor.c:66:6:readSens2	8	static
-../Core/Src/sensor.c:73:6:calibrate_sensors	16	static
-../Core/Src/sensor.c:103:7:sens_get	24	static
-../Core/Src/sensor.c:140:7:calculateEncoderSpeed	8	static
-../Core/Src/sensor.c:195:7:EncoderSpeed	48	static
-../Core/Src/sensor.c:237:6:SpeedControl_NoENC	64	static
+../Core/Src/sensor.c:51:6:readSens	16	static
+../Core/Src/sensor.c:62:6:readSens2	8	static
+../Core/Src/sensor.c:69:6:calibrate_sensors	16	static
+../Core/Src/sensor.c:99:7:sens_get	24	static
+../Core/Src/sensor.c:136:7:calculateEncoderSpeed	8	static
+../Core/Src/sensor.c:191:7:EncoderSpeed	48	static
+../Core/Src/sensor.c:233:6:SpeedControl_NoENC	64	static
+../Core/Src/sensor.c:297:6:VelocityPlan	4	static
+../Core/Src/sensor.c:309:6:PrintVelocityData	32	static

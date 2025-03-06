@@ -10,6 +10,8 @@
 
 #define SENSOR_COUNT 13
 
+#define MAX_RECORDS 10000
+
 
 //sens
 extern uint16_t Line_sens[13];
@@ -55,6 +57,12 @@ extern float average_cross;
 extern uint32_t start_time;
 extern uint16_t test_flag;
 extern int32_t cnt_L;
+
+
+//VelocityPlan
+//#define MAX_RECORDS 100
+extern int32_t VP_L[MAX_RECORDS];
+extern int32_t VP_R[MAX_RECORDS];
 
 
 void readSens(void);
