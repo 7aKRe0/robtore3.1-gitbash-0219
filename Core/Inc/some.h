@@ -6,6 +6,8 @@
 #include"math.h"
 #include <stdio.h>
 
+#include <stdbool.h>
+
 #include <LED.h>
 #include <sensor.h>
 #include <SW1.h>
@@ -15,7 +17,7 @@
 //#define SENSOR_COUNT 13
 #define dt 0.001
 #define TIRE 22
-#define ENCODER_CPR 2048  //  CPR のエンコーダを使用
+#define ENCODER_CPR 4096 //2048  //  CPR のエンコーダを使用
 #define OFFSET  10000
 
 

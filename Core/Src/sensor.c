@@ -6,6 +6,11 @@
 
 //#define MAX_RECORDS 500000
 
+float  accumulation;
+float Kp = 0.15;
+float Kd = 0.001;
+float base_speed1;
+
 
 float distance_1ms,distance_1ms_L,distance_1ms_R;
 
@@ -39,10 +44,7 @@ int32_t test_cnt_R;
 //static uint16_t index = 0;
 
 
-float  accumulation;
-float Kp = 0.1;
-float Kd = 0.001;
-float base_speed1;
+
 
 
 int32_t VP_L[MAX_RECORDS] = {0};
@@ -136,13 +138,32 @@ float sens_get(void){
 // int32_t cnt_test; //Max value is 2048
 
 float calculateEncoderSpeed(){
-
+	 static bool first_call = true;
 
 	cnt_new_L =  TIM4 -> CNT ; //dL
 	cnt_new_R = TIM3 -> CNT; //dR
 
+
+	 if (first_call) {
+
+	        TIM4->CNT = 32767;
+	        TIM3->CNT = 32767;
+
+	        // 次回のために old も 32767 に同期
+	        cnt_old_L = 32767;
+	        cnt_old_R = 32767;
+//	    	cnt_old_L = cnt_new_L;
+//	        cnt_old_R = cnt_new_R;
+
+	        first_call = false;
+	        // 初回は計算せず return 0
+	        return 0.0f;
+	    }
+
+
 	 TIM4 -> CNT=32767;
 	 TIM3 -> CNT=32767;
+
 
 //	 test_cnt_L =TIM4 -> CNT ;
 //	 test_cnt_R =TIM3 -> CNT;
