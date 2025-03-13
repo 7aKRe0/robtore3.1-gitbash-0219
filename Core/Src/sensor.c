@@ -36,6 +36,8 @@ int32_t cnt_R;
 int32_t test_cnt_L;
 int32_t test_cnt_R;
 
+//static uint16_t index = 0;
+
 
 float  accumulation;
 float Kp = 0.1;
@@ -293,11 +295,9 @@ void SpeedControl_NoENC() {
 }
 
 
+uint16_t index = 0;
 
 void VelocityPlan(){
-	static uint16_t index = 0;
-
-
 
 	if (index < MAX_RECORDS) {
 	        VP_L[index] = cnt_L;
@@ -309,7 +309,11 @@ void VelocityPlan(){
 void PrintVelocityData() {
     printf("=== Velocity Data ===\r\n");
     for (uint16_t i = 0; i < MAX_RECORDS; i++) {
-        printf("L[%d]: %ld, R[%d]: %ld\r\n", i, VP_L[i], i, VP_R[i]);
+//        printf("L[%d]: %ld, R[%d]: %ld\r\n", i, VP_L[i], i, VP_R[i]);
+
+        printf("%ld, %ld\r\n", VP_L[i], VP_R[i]);
+
+
     }
 }
 

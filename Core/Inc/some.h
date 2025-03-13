@@ -15,7 +15,7 @@
 //#define SENSOR_COUNT 13
 #define dt 0.001
 #define TIRE 22
-#define ENCODER_CPR 2048  //  CPR のエンコーダを使用(kari)
+#define ENCODER_CPR 2048  //  CPR のエンコーダを使用
 #define OFFSET  10000
 
 
@@ -40,6 +40,8 @@ extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim6;
 extern TIM_HandleTypeDef htim8;
+extern TIM_HandleTypeDef htim7;
+
 
 extern UART_HandleTypeDef huart6;
 

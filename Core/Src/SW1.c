@@ -82,6 +82,8 @@ void mode_test(void){
 		  target_speed =1.8;
 //		  1.8 kansou
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  HAL_TIM_Base_Start_IT(&htim7);//test
+
 		  test_DD();
 //		  base_speed1=-125;
 
@@ -95,6 +97,9 @@ void mode_test(void){
 
 		  target_speed =2.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  HAL_TIM_Base_Start_IT(&htim7);//test
+
+
 		  test_DD();
 
 //		  base_speed1=-127;
@@ -108,6 +113,9 @@ void mode_test(void){
 
 		  target_speed =2.2;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  HAL_TIM_Base_Start_IT(&htim7);//test
+
+
 		  test_DD();
 
 //		  base_speed1=-129;
@@ -121,6 +129,9 @@ void mode_test(void){
 
 		  target_speed =2.3;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  HAL_TIM_Base_Start_IT(&htim7);//test
+
+
 		  test_DD();
 
 //		  base_speed1=-129;
@@ -186,6 +197,8 @@ void test_DD(){
 		if (test_flag >= 2) {
 				LED_RGB_2(7);
 				HAL_TIM_Base_Stop_IT(&htim6);
+				HAL_TIM_Base_Stop_IT(&htim7);//test
+
 				ControlMotor(0, 0);
 			break;
 

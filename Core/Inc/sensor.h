@@ -10,7 +10,7 @@
 
 #define SENSOR_COUNT 13
 
-#define MAX_RECORDS 10000
+#define MAX_RECORDS 1000 //10000
 
 
 //sens
@@ -63,6 +63,7 @@ extern int32_t cnt_L;
 //#define MAX_RECORDS 100
 extern int32_t VP_L[MAX_RECORDS];
 extern int32_t VP_R[MAX_RECORDS];
+extern uint16_t index ;
 
 
 void readSens(void);
@@ -73,6 +74,7 @@ float calculateEncoderSpeed();
 void flag();
 float sens_get(void);
 float  EncoderSpeed();
+void	VelocityPlan();
 
 
 
