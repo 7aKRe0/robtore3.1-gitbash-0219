@@ -79,10 +79,14 @@ void mode_test(void){
 		  LED_RGB(0);
 
 
-		  target_speed =1.8;
+		  target_speed =0.0;
 //		  1.8 kansou
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  HAL_Delay(300);
+
+		  target_speed =0.8;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
+
 
 		  test_DD();
 //		  base_speed1=-125;
@@ -95,8 +99,11 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =2.0;
+		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+
+		  HAL_Delay(300);
+		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -111,8 +118,11 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =2.2;
+		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+
+		  HAL_Delay(300);
+		  target_speed =1.1;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -127,8 +137,11 @@ void mode_test(void){
 //		  HAL_TIM_Base_Start_IT(&htim6);
 		  LED_RGB(0);
 
-		  target_speed =2.3;
+		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+
+		  HAL_Delay(300);
+		  target_speed =1.2;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -194,10 +207,10 @@ void test_DD(){
 			}
 		}
 
-		if (test_flag >= 2) {
+		if (test_flag >= 2*1) {//2
 				LED_RGB_2(7);
 				HAL_TIM_Base_Stop_IT(&htim6);
-				HAL_TIM_Base_Stop_IT(&htim7);//test
+//				HAL_TIM_Base_Stop_IT(&htim7);//test
 
 				ControlMotor(0, 0);
 			break;
@@ -212,13 +225,13 @@ void test_DD(){
 
 
 	 accumulation = 0;
-	 target_speed = 1.1;
+	 target_speed = 0.5;
      calculateEncoderSpeed();
  	LED_RGB_2(5);
 
 
 
-	    while (accumulation < 45) {
+	    while (accumulation < 25) {
 	        accumulation += distance_1ms;
 //	        ControlMotor(110, 110);
 	        HAL_Delay(10);
@@ -227,6 +240,8 @@ void test_DD(){
 
 	LED_RGB_2(2);
 	HAL_TIM_Base_Stop_IT(&htim6);
+	HAL_TIM_Base_Stop_IT(&htim7);//test
+
 	ControlMotor(0, 0);
 	return 0;
 }
