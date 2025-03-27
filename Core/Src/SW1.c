@@ -195,6 +195,16 @@ void test_DD(){
 //		readSens2();
 //		test_flag = 1;
 
+
+		if (Line3_sens[0] == 0) {
+			while (1) {
+
+				if (Line3_sens[0] == 1) {
+					marker_flag++;
+					break;
+				}
+			}
+		}
 		//change_mode();
 
 		if (Line3_sens[1] == 0 && cross_flag ==0) {
