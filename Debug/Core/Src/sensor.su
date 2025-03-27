@@ -5,5 +5,5 @@
 ../Core/Src/sensor.c:140:7:calculateEncoderSpeed	8	static
 ../Core/Src/sensor.c:214:7:EncoderSpeed	48	static
 ../Core/Src/sensor.c:256:6:SpeedControl_NoENC	64	static
-../Core/Src/sensor.c:321:6:VelocityPlan	4	static
-../Core/Src/sensor.c:330:6:PrintVelocityData	16	static
+../Core/Src/sensor.c:322:6:VelocityPlan	4	static
+../Core/Src/sensor.c:334:6:PrintVelocityData	16	static

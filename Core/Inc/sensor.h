@@ -10,7 +10,7 @@
 
 #define SENSOR_COUNT 13
 
-#define MAX_RECORDS 1000 //10000
+#define MAX_RECORDS 10000 //10000
 
 
 //sens
@@ -63,7 +63,8 @@ extern int32_t cnt_L;
 //#define MAX_RECORDS 100
 extern int32_t VP_L[MAX_RECORDS];
 extern int32_t VP_R[MAX_RECORDS];
-extern uint16_t index ;
+extern uint16_t record_index ;
+extern volatile uint8_t marker_flag;
 
 
 void readSens(void);

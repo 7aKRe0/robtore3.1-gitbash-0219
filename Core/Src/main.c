@@ -84,6 +84,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim->Instance == TIM6){
 		SpeedControl_NoENC();
 		readSens2();
+
+        if (Line3_sens[0] == 0) {
+            marker_flag = 1;
+        }
 //		VelocityPlan();
 	}
 	if(htim->Instance == TIM7){

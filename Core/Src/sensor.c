@@ -7,8 +7,8 @@
 //#define MAX_RECORDS 500000
 
 float  accumulation;
-float Kp = 0.15;
-float Kd = 0.001;
+float Kp = 0.1;
+float Kd = 0.002;
 float base_speed1;
 
 
@@ -49,7 +49,7 @@ int32_t test_cnt_R;
 
 int32_t VP_L[MAX_RECORDS] = {0};
 int32_t VP_R[MAX_RECORDS] = {0};
-
+uint8_t VP_S[MAX_RECORDS] = {0};
 
 void MX_ADC1_Init(void);
 void readSens(void){
@@ -316,23 +316,27 @@ void SpeedControl_NoENC() {
 }
 
 
-uint16_t index = 0;
+uint16_t record_index = 0;
+volatile uint8_t marker_flag = 0;
 
 void VelocityPlan(){
 
-	if (index < MAX_RECORDS) {
-	        VP_L[index] = cnt_L;
-	        VP_R[index] = cnt_R;
-	        index++;
+	if (record_index < MAX_RECORDS) {
+	        VP_L[record_index] = cnt_L;
+	        VP_R[record_index] = cnt_R;
+
+	        VP_S[record_index] = marker_flag;
+	        record_index++;
+	        marker_flag = 0;
 	    }
 	}
 
 void PrintVelocityData() {
     printf("=== Velocity Data ===\r\n");
     for (uint16_t i = 0; i < MAX_RECORDS; i++) {
-//        printf("L[%d]: %ld, R[%d]: %ld\r\n", i, VP_L[i], i, VP_R[i]);
 
-        printf("%ld, %ld\r\n", VP_L[i], VP_R[i]);
+//        printf("%ld, %ld\r\n", VP_L[i], VP_R[i]);
+    	printf("%ld, %ld, %d\r\n", VP_L[i], VP_R[i], VP_S[i]);
 
 
     }
