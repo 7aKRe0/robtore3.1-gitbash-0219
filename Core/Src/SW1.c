@@ -1,4 +1,5 @@
 #include "some.h"
+#include "segment.h"
 
 //SW2 PB15 SW1 PC13
 
@@ -82,9 +83,10 @@ void mode_test(void){
 		  target_speed =0.0;
 //		  1.8 kansou
 		  HAL_TIM_Base_Start_IT(&htim6);
-		  HAL_Delay(300);
+		  runMode = MODE_RECORD;
+		  HAL_Delay(500);
 
-		  target_speed =0.8;
+		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -101,8 +103,13 @@ void mode_test(void){
 
 		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  runMode = MODE_PLAY;
+		  //追加4.24
+		  curSeg = 0;
+		  target_speed = segTbl[0].speed;
 
-		  HAL_Delay(300);
+
+		  HAL_Delay(500);
 		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
@@ -120,9 +127,13 @@ void mode_test(void){
 
 		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  runMode = MODE_PLAY;
+		  //追加4.24
+		  curSeg = 0;
+		  target_speed = segTbl[0].speed;
 
-		  HAL_Delay(300);
-		  target_speed =1.1;
+		  HAL_Delay(500);
+		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -139,9 +150,13 @@ void mode_test(void){
 
 		  target_speed =0.0;
 		  HAL_TIM_Base_Start_IT(&htim6);
+		  runMode = MODE_PLAY;
+		  //追加4.24
+		  curSeg = 0;
+		  target_speed = segTbl[0].speed;
 
-		  HAL_Delay(300);
-		  target_speed =1.2;
+		  HAL_Delay(500);
+		  target_speed =1.0;
 		  HAL_TIM_Base_Start_IT(&htim7);//test
 
 
@@ -230,6 +245,11 @@ void test_DD(){
 
 	}
 
+	if(runMode == MODE_RECORD){
+	    BuildSegmentTable();
+//	    Flash_WriteSegmentTable();
+	}
+
 	calculateEncoderSpeed();
 	HAL_TIM_Base_Start_IT(&htim6);
 
@@ -253,5 +273,5 @@ void test_DD(){
 	HAL_TIM_Base_Stop_IT(&htim7);//test
 
 	ControlMotor(0, 0);
-	return 0;
+	return ;
 }

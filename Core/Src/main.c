@@ -5,6 +5,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "segment.h"
 #include "some.h"
 
 /* USER CODE END Includes */
@@ -85,19 +86,30 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		SpeedControl_NoENC();
 		readSens2();
 
-//        if (Line3_sens[0] == 0) {
-//            marker_flag = 1;
-//        }
-//		VelocityPlan();
-	}
-	if(htim->Instance == TIM7){
-//		calculateEncoderSpeed();
-		VelocityPlan();
-//		 LED_RGB(2);
-//		 printf("aaa");
-
 
 	}
+	 if(htim->Instance == TIM7){
+
+	        if(runMode == MODE_RECORD) {
+	            VelocityPlan();
+
+	            if(marker_flag){
+	                marker_idx[marker_cnt++] = record_index - 1;
+	                marker_flag = 0;
+	            }
+	        }
+
+	        else if(runMode == MODE_PLAY) {
+	            /* マーカーが来たら次のセグメントへ切り替え */
+	        	if (marker_flag > 0) {
+	        	    marker_flag = 0;
+
+	        	    if (++curSeg < segCnt) {
+	        	        target_speed = segTbl[curSeg].speed;
+	        	    }
+	            }
+	        }
+	    }
 
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {//AD

@@ -10,8 +10,15 @@
 
 #define SENSOR_COUNT 13
 
-#define MAX_RECORDS 10000 //10000
+#define MAX_RECORDS 5000 //10000
 
+#define TREAD_MM 5.13f
+
+#define TIRE_DIAMETER_MM 21.0f  // わかりやすく変更
+#define GEAR_RATIO      0.4f         // ギヤ比
+#define RESOLUTION      4096.0f      // モータエンコーダ分解能
+
+#define ENC_MM_PER_CNT  ((float)(M_PI * TIRE_DIAMETER_MM * GEAR_RATIO) / RESOLUTION)
 
 //sens
 extern uint16_t Line_sens[13];
@@ -77,6 +84,7 @@ float sens_get(void);
 float  EncoderSpeed();
 void	VelocityPlan();
 
+void PrintVelocityData() ;
 
 
 #endif /* INC_SENSOR_H_ */

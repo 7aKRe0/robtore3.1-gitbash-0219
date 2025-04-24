@@ -1,5 +1,5 @@
 #include "some.h"
-
+#include "segment.h"
 
 #define REDUCTION_RATIO 0.4 // 減速比
 #define DISTANCE_PER_CNT (M_PI * TIRE * REDUCTION_RATIO / ENCODER_CPR) //[mm per cnt]
@@ -50,6 +50,20 @@ int32_t test_cnt_R;
 int32_t VP_L[MAX_RECORDS] = {0};
 int32_t VP_R[MAX_RECORDS] = {0};
 uint8_t VP_S[MAX_RECORDS] = {0};
+
+
+
+/* ---- 実体定義 ----------------------------------------------- */
+volatile RunMode  runMode      = MODE_RECORD;
+SegmentInfo       segTbl[MAX_SEG-1];
+uint8_t           segCnt       = 0;
+
+uint16_t  marker_idx[MAX_SEG];
+uint8_t   marker_cnt = 0;
+
+uint16_t  record_index = 0;
+volatile uint8_t marker_flag = 0;
+
 
 void MX_ADC1_Init(void);
 void readSens(void){
@@ -316,29 +330,157 @@ void SpeedControl_NoENC() {
 }
 
 
-uint16_t record_index = 0;
-volatile uint8_t marker_flag = 0;
+//uint16_t record_index = 0;
+//volatile uint8_t marker_flag = 0;
 
-void VelocityPlan(){
+//追加4.18
+uint16_t marker_idx[MAX_SEG];   // マーカー位置
+//uint8_t  marker_cnt = 0;
 
-	if (record_index < MAX_RECORDS) {
-	        VP_L[record_index] = cnt_L;
-	        VP_R[record_index] = cnt_R;
+float posX[MAX_RECORDS+1];
+float posY[MAX_RECORDS+1];
 
-	        VP_S[record_index] = marker_flag;
-	        record_index++;
-	        marker_flag = 0;
-	    }
-	}
-
-void PrintVelocityData() {
-    printf("=== Velocity Data ===\r\n");
-    for (uint16_t i = 0; i < MAX_RECORDS; i++) {
-
-//        printf("%ld, %ld\r\n", VP_L[i], VP_R[i]);
-    	printf("%ld, %ld, %d\r\n", VP_L[i], VP_R[i], VP_S[i]);
+uint8_t curSeg = 0;
 
 
+void BuildSegmentTable(void)
+{
+    segCnt = marker_cnt - 1;
+    for(uint8_t s = 0; s < segCnt; s++){
+        uint16_t a = marker_idx[s];
+        uint16_t b = marker_idx[s+1];
+        uint16_t n = b - a + 1;
+        // --- 点群を tmp バッファにコピー ---
+        Position pts[256];                // n が小さい想定
+        for(uint16_t i=0;i<n;i++){
+            pts[i].x = posX[a+i];
+            pts[i].y = posY[a+i];
+        }
+        float cx,cy,R;
+        fit_circle_kasa(pts, n, &cx,&cy,&R);
+        segTbl[s].R     = R;
+        segTbl[s].speed = decideSpeed(R);
     }
 }
 
+
+
+void VelocityPlan(void)
+{
+    if(record_index >= MAX_RECORDS) return;
+
+    // ──1) エンコーダ生保存──
+    VP_L[record_index] = cnt_L;
+    VP_R[record_index] = cnt_R;
+
+    // ──2) マーカーフラグ保存──
+    VP_S[record_index] = marker_flag;
+    if(marker_flag){
+        marker_idx[marker_cnt++] = record_index;
+        marker_flag = 0;
+    }
+
+    // ──3) オドメトリ更新──
+    if(record_index>0){
+        odom_update(record_index);        // Δx,Δy 積分→posX/Y
+    }
+
+    record_index++;
+}
+
+
+float decideSpeed(float R)
+{
+    if(R <= 0.05f) return 0.8f;    // 直線 → 高速
+    if(R <= 0.08f) return 1.0f;    // 中カーブ → 中速
+    return 1.5f;                   // 急カーブ → 低速.直線？
+}
+
+
+
+void PrintVelocityData() {
+    printf("=== Velocity Data ===\r\n");
+//    for (uint16_t i = 0; i < MAX_RECORDS; i++) {
+//
+////        printf("%ld, %ld\r\n", VP_L[i], VP_R[i]);
+//    	printf("%ld, %ld, %d\r\n", VP_L[i], VP_R[i], VP_S[i]);
+//
+//
+//    }
+    for(uint8_t i = 0; i < segCnt; i++){
+        printf("Seg[%d]: R = %.2f, Speed = %.2f\r\n", i, segTbl[i].R, segTbl[i].speed);
+    }
+
+}
+
+void odom_update(uint16_t idx)
+{
+    if(idx==0) return;
+    /* 1回目とそれ以降のカウント差をミリメートルへ変換 */
+    float dL = (VP_L[idx] - VP_L[idx-1]) * ENC_MM_PER_CNT;
+    float dR = (VP_R[idx] - VP_R[idx-1]) * ENC_MM_PER_CNT;
+
+    float dS = (dL + dR) * 0.5f;
+    static float theta = 0.0f;
+    theta += (dR - dL) / TREAD_MM;
+
+    posX[idx] = posX[idx-1] + dS * cosf(theta);
+    posY[idx] = posY[idx-1] + dS * sinf(theta);
+}
+
+void fit_circle_kasa(Position* pts, uint16_t n,
+                     float* cx, float* cy, float* R)
+{
+    if(n < 3){                 /* 点が少な過ぎる → 退化 */
+        *cx = *cy = 0.0f;  *R = INFINITY;
+        return;
+    }
+
+    /* ---------- １パスで必要な総和を計算 ---------- */
+    double Sx=0, Sy=0, Sx2=0, Sy2=0, Sx3=0, Sy3=0, Sxy=0, Sx2y=0, Sxy2=0;
+
+    for(uint16_t i=0; i<n; i++){
+        double x = pts[i].x;
+        double y = pts[i].y;
+        double x2 = x*x;
+        double y2 = y*y;
+
+        Sx   += x;
+        Sy   += y;
+        Sx2  += x2;
+        Sy2  += y2;
+        Sx3  += x2*x;
+        Sy3  += y2*y;
+        Sxy  += x*y;
+        Sx2y += x2*y;
+        Sxy2 += x*y2;
+    }
+
+    /* ---------- Kasa 法の連立一次式 ---------- */
+    double C = n * Sx2 - Sx*Sx;
+    double D = n * Sxy - Sx*Sy;
+    double E = n * Sx3 + n * Sxy2 - (Sx2 + Sy2)*Sx;
+    double G = n * Sy2 - Sy*Sy;
+    double H = n * Sx2y + n * Sy3 - (Sx2 + Sy2)*Sy;
+
+    double denom = 2.0*(C*G - D*D);
+    if(fabs(denom) < 1e-12){   /* ほぼ直線 → 半径∞ */
+        *cx = *cy = 0.0f;  *R = INFINITY;
+        return;
+    }
+
+    /* ---------- 中心座標 (a,b) ---------- */
+    double a = (G*E - D*H) / denom;
+    double b = (C*H - D*E) / denom;
+    *cx = (float)a;
+    *cy = (float)b;
+
+    /* ---------- 半径を点群から算出（平均距離） ---------- */
+    double rSum = 0.0;
+    for(uint16_t i=0; i<n; i++){
+        double dx = pts[i].x - a;
+        double dy = pts[i].y - b;
+        rSum += sqrt(dx*dx + dy*dy);
+    }
+    *R = (float)(rSum / n);
+}
