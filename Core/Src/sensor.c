@@ -391,9 +391,9 @@ void VelocityPlan(void)
 
 float decideSpeed(float R)
 {
-    if(R <= 0.05f) return 0.8f;    // 直線 → 高速
-    if(R <= 0.08f) return 1.0f;    // 中カーブ → 中速
-    return 1.5f;                   // 急カーブ → 低速.直線？
+    if(R <= 0.05f) return 0.8f;    // 急カーブ  低速
+    if(R <= 0.08f) return 1.0f;    // 中カーブ  中速
+    return 1.5f;                   // 直線
 }
 
 
